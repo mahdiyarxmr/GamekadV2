@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build && ncc build dist/main.js -o dist/bundle -m",
+    "build": "nest build && ncc build dist/main.js -o bundle -m",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/bundle/index.js",
+    "start:prod": "node bundle/index.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "seed": "ts-node src/seed.ts"
@@ -48,5 +48,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
   },
-  "main": "dist/bundle/index.js"
+  "main": "bundle/index.js"
 }
