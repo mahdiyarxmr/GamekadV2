@@ -8,7 +8,7 @@ import type { Express, Request, Response } from 'express';
 const express = require('express');
 
 const server: Express = express();
-const logger = new Logger('GamekadBootstrap');
+const logger = new Logger('Gamekad');
 
 // URL Normalizer: Handles both /api/v1/... and stripped proxy paths (/v1/... or /...)
 server.use((req, res, next) => {
@@ -24,73 +24,85 @@ server.use((req, res, next) => {
   next();
 });
 
-let appInstance: any = null;
+let isInitialized = false;
+let initPromise: Promise<Express> | null = null;
 
-export async function bootstrap() {
-  if (appInstance) return appInstance;
+export async function bootstrap(): Promise<Express> {
+  if (isInitialized) return server;
+  if (initPromise) return initPromise;
 
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
+  initPromise = (async () => {
+    try {
+      const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  app.enableCors({
-    origin: '*',
-    credentials: true,
-  });
+      app.enableCors({
+        origin: '*',
+        credentials: true,
+      });
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: false,
-    }),
-  );
+      app.useGlobalPipes(
+        new ValidationPipe({
+          whitelist: true,
+          transform: true,
+          forbidNonWhitelisted: false,
+        }),
+      );
 
-  const config = new DocumentBuilder()
-    .setTitle('Gamekad / Rokad API')
-    .setDescription('پلتفرم باشگاه بازی و رویدادهای حضوری گیم‌کاد / رکاد مشهد')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+      const config = new DocumentBuilder()
+        .setTitle('Gamekad / Rokad API')
+        .setDescription('پلتفرم باشگاه بازی و رویدادهای حضوری گیم‌کاد / رکاد مشهد')
+        .setVersion('1.0')
+        .addBearerAuth()
+        .build();
+      const document = SwaggerModule.createDocument(app, config);
+      SwaggerModule.setup('api/docs', app, document);
 
-  await app.init();
-
-  // In standalone / Fluid compute, listen on process.env.PORT or 3000
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-  try {
-    await app.listen(port);
-    logger.log(`گیم‌کاد سرور روی پورت ${port} با موفقیت راه‌اندازی شد.`);
-  } catch (err: any) {
-    if (err?.code !== 'EADDRINUSE') {
-      logger.warn(`هشدار در listen روی پورت ${port} (ادامه به حالت Serverless): ${err?.message}`);
+      await app.init();
+      isInitialized = true;
+      logger.log('گیم‌کاد: اپلیکیشن با موفقیت در حالت Serverless آماده شد.');
+      return server;
+    } catch (err) {
+      logger.error('خطای راه‌اندازی گیم‌کاد:', err);
+      initPromise = null;
+      throw err;
     }
-  }
+  })();
 
-  appInstance = app;
-  return app;
+  return initPromise;
 }
 
-// Bootstrap promise cached across serverless invocations
-const bootstrapPromise = bootstrap().catch((err) => {
-  logger.error('Gamekad bootstrap failed:', err);
-});
-
-// Serverless function handler for Vercel
+// Serverless handler for Vercel
 export default async function handler(req: Request, res: Response) {
-  await bootstrapPromise;
-  return new Promise<void>((resolve, reject) => {
-    res.on('finish', () => resolve());
-    res.on('close', () => resolve());
-    res.on('error', (err) => reject(err));
-    server(req, res, (err: any) => {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
+  try {
+    await bootstrap();
+    return server(req, res);
+  } catch (err: any) {
+    logger.error('Vercel handler error:', err);
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(
+      JSON.stringify({
+        error: 'FUNCTION_INITIALIZATION_ERROR',
+        message: err?.message || String(err),
+        stack: err?.stack,
+      }),
+    );
+  }
 }
 
-// CommonJS export for Node runtime
+// CommonJS export
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = handler;
   module.exports.default = handler;
+}
+
+// Standalone local execution
+if (!process.env.VERCEL && typeof require !== 'undefined' && require.main === module) {
+  (async () => {
+    await bootstrap();
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+    server.listen(port, () => {
+      logger.log(`گیم‌کاد سرور روی پورت ${port} با موفقیت راه‌اندازی شد.`);
+    });
+  })();
 }

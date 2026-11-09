@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && ncc build dist/main.js -o dist/bundle -m",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/bundle/index.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "seed": "ts-node src/seed.ts"
@@ -39,6 +39,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.5",
     "@types/passport-jwt": "^4.0.1",
+    "@vercel/ncc": "^0.45.0",
     "prisma": "^6.4.1",
     "rimraf": "^6.0.1",
     "source-map-support": "^0.5.21",
@@ -47,5 +48,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
   },
-  "main": "dist/main.js"
+  "main": "dist/bundle/index.js"
 }
