@@ -1,21 +1,14 @@
+
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "services": {
-    "server": {
-      "root": "server",
-      "framework": "nestjs",
-      "bindings": [
-        {
-          "type": "service",
-          "service": "client",
-          "format": "url",
-          "env": "CLIENT_URL"
-        }
-      ]
-    },
     "client": {
       "root": "client",
       "framework": "vite"
+    },
+    "server": {
+      "root": "server",
+      "framework": "nestjs"
     }
   },
   "rewrites": [
