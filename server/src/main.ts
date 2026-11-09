@@ -8,7 +8,7 @@ import type { Express, Request, Response } from 'express';
 const express = require('express');
 
 const server: Express = express();
-let isAppInitialized = false;
+const logger = new Logger('GamekadBootstrap');
 
 // URL Normalizer: Handles both /api/v1/... and stripped proxy paths (/v1/... or /...)
 server.use((req, res, next) => {
@@ -24,8 +24,12 @@ server.use((req, res, next) => {
   next();
 });
 
-export async function createNestServer(expressInstance: Express) {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(expressInstance));
+let appInstance: any = null;
+
+export async function bootstrap() {
+  if (appInstance) return appInstance;
+
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
   app.enableCors({
     origin: '*',
@@ -40,7 +44,6 @@ export async function createNestServer(expressInstance: Express) {
     }),
   );
 
-  // Swagger Documentation
   const config = new DocumentBuilder()
     .setTitle('Gamekad / Rokad API')
     .setDescription('پلتفرم باشگاه بازی و رویدادهای حضوری گیم‌کاد / رکاد مشهد')
@@ -51,56 +54,43 @@ export async function createNestServer(expressInstance: Express) {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.init();
+
+  // In standalone / Fluid compute, listen on process.env.PORT or 3000
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  try {
+    await app.listen(port);
+    logger.log(`گیم‌کاد سرور روی پورت ${port} با موفقیت راه‌اندازی شد.`);
+  } catch (err: any) {
+    if (err?.code !== 'EADDRINUSE') {
+      logger.warn(`هشدار در listen روی پورت ${port} (ادامه به حالت Serverless): ${err?.message}`);
+    }
+  }
+
+  appInstance = app;
   return app;
 }
 
-// Handler for Vercel Serverless Functions
+// Bootstrap promise cached across serverless invocations
+const bootstrapPromise = bootstrap().catch((err) => {
+  logger.error('Gamekad bootstrap failed:', err);
+});
+
+// Serverless function handler for Vercel
 export default async function handler(req: Request, res: Response) {
-  if (!isAppInitialized) {
-    await createNestServer(server);
-    isAppInitialized = true;
-  }
-  return server(req, res);
+  await bootstrapPromise;
+  return new Promise<void>((resolve, reject) => {
+    res.on('finish', () => resolve());
+    res.on('close', () => resolve());
+    res.on('error', (err) => reject(err));
+    server(req, res, (err: any) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
 }
 
-// CommonJS compatibility for Vercel Node runtime
+// CommonJS export for Node runtime
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = handler;
   module.exports.default = handler;
-}
-
-// Standalone execution (Local dev / Docker / Dedicated server) - only when run directly
-if (typeof require !== 'undefined' && require.main === module) {
-  async function bootstrap() {
-    const logger = new Logger('GamekadBootstrap');
-    const app = await NestFactory.create(AppModule);
-
-    app.enableCors({
-      origin: '*',
-      credentials: true,
-    });
-
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        transform: true,
-        forbidNonWhitelisted: false,
-      }),
-    );
-
-    const config = new DocumentBuilder()
-      .setTitle('Gamekad / Rokad API')
-      .setDescription('پلتفرم باشگاه بازی و رویدادهای حضوری گیم‌کاد / رکاد مشهد')
-      .setVersion('1.0')
-      .addBearerAuth()
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document);
-
-    const port = process.env.PORT || 3000;
-    await app.listen(port);
-    logger.log(`گیم‌کاد سرور روی پورت ${port} با موفقیت راه‌اندازی شد.`);
-    logger.log(`مستندات سوآگر در دسترس است: http://localhost:${port}/api/docs`);
-  }
-  bootstrap();
 }
