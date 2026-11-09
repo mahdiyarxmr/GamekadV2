@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build && ncc build dist/main.js -o bundle -m",
+    "build": "nest build && ncc build dist/main.js -o dist/bundle -m && node -e \"require('fs').copyFileSync('dist/bundle/index.js', 'dist/main.js')\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node bundle/index.js",
+    "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "seed": "ts-node src/seed.ts"
@@ -48,5 +48,5 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
   },
-  "main": "bundle/index.js"
+  "main": "dist/main.js"
 }

@@ -1,2 +1,2 @@
-const handler = require('../server/bundle/index.js');
+const handler = require('../server/dist/main.js');
 module.exports = handler.default || handler;
