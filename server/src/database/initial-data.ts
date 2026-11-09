@@ -1,0 +1,789 @@
+import * as bcrypt from 'bcryptjs';
+
+export function getInitialSeedData() {
+  const users = [
+  {
+    "id": "usr-admin-1",
+    "username": "admin",
+    "email": "admin@gamekad.ir",
+    "displayName": "مدیر کل گیم‌کاد",
+    "passwordHash": "$2a$10$soBmW4l6zQjkp.FM0LLeXeDvDY0.wEr4dmD7.Iu8Z.I.iivCYe4pa",
+    "gender": "boy",
+    "avatar": "/profiles/Game Club.jpg",
+    "phone": "09151112233",
+    "bio": "مدیر باشگاه و طراح ارشد سناریوهای استارتاپی رکاد.",
+    "role": "admin",
+    "membership": "ROKAD",
+    "godGameAllowed": true,
+    "isSuspended": false,
+    "walletBalance": 2500000,
+    "createdAt": "2026-11-09T12:21:27.570Z",
+    "updatedAt": "2026-11-09T12:21:27.570Z"
+  },
+  {
+    "id": "usr-host-1",
+    "username": "host",
+    "email": "host@gamekad.ir",
+    "displayName": "بهزاد مهدوی (خدای بازی)",
+    "passwordHash": "$2a$10$Gn/T26HoBGTjgbd0g9opUePWcOlwylPjV5JTAJaMWU0DDcasEGz6u",
+    "gender": "boy",
+    "avatar": "/profiles/Boy.png",
+    "phone": "09152223344",
+    "bio": "میزبان رسمی رویدادهای شب‌های مافیا و سناریوهای مهارتی در مشهد.",
+    "role": "user",
+    "membership": "ROKAD",
+    "godGameAllowed": true,
+    "isSuspended": false,
+    "walletBalance": 850000,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "usr-player-1",
+    "username": "player",
+    "email": "player@gamekad.ir",
+    "displayName": "مهدیار شریفی",
+    "passwordHash": "$2a$10$Mgz6w8L4xwFaZjRRP1AT4OIUgNGhCwgr4LJyRZRhpQrJSjRo1uxAG",
+    "gender": "boy",
+    "avatar": "/profiles/Studio.jpg",
+    "phone": "09153334455",
+    "bio": "علاقه‌مند به بازی‌های استراتژیک، مافیای کاپو و فیفا کنسولی.",
+    "role": "user",
+    "membership": "ROKAD",
+    "godGameAllowed": false,
+    "isSuspended": false,
+    "walletBalance": 670000,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "usr-player-2",
+    "username": "sara_art",
+    "email": "sara@gamekad.ir",
+    "displayName": "سارا رضایی",
+    "passwordHash": "$2a$10$Mgz6w8L4xwFaZjRRP1AT4OIUgNGhCwgr4LJyRZRhpQrJSjRo1uxAG",
+    "gender": "girl",
+    "avatar": "/profiles/Girl.jpg",
+    "phone": "09154445566",
+    "bio": "هنرجوی هنرستان دخترانه رکاد، استراتژیست ارشد نقش‌های مستقل.",
+    "role": "user",
+    "membership": "ROKAD",
+    "godGameAllowed": false,
+    "isSuspended": false,
+    "walletBalance": 600000,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "usr-player-3",
+    "username": "ali_k",
+    "email": "ali@gmail.com",
+    "displayName": "علی کاظمی",
+    "passwordHash": "$2a$10$Mgz6w8L4xwFaZjRRP1AT4OIUgNGhCwgr4LJyRZRhpQrJSjRo1uxAG",
+    "gender": "boy",
+    "avatar": "/profiles/Academy.jpg",
+    "phone": "09155556677",
+    "bio": "شطرنج‌باز و گیمر مافیای کلاسیک.",
+    "role": "user",
+    "membership": "EXTERNAL",
+    "godGameAllowed": false,
+    "isSuspended": false,
+    "walletBalance": 150000,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "usr-player-4",
+    "username": "yasaman_m",
+    "email": "yasaman@gamekad.ir",
+    "displayName": "یاسمن موسوی",
+    "passwordHash": "$2a$10$Mgz6w8L4xwFaZjRRP1AT4OIUgNGhCwgr4LJyRZRhpQrJSjRo1uxAG",
+    "gender": "girl",
+    "avatar": "/profiles/School.jpg",
+    "phone": "09156667788",
+    "bio": "توسعه‌دهنده وب و بازیکن سناریوی اکوسیستم کسب‌وکار.",
+    "role": "user",
+    "membership": "ROKAD",
+    "godGameAllowed": false,
+    "isSuspended": false,
+    "walletBalance": 310000,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const categories = [
+  {
+    "id": "cat-mafia",
+    "name": "شب‌های مافیا و سناریو",
+    "slug": "mafia",
+    "type": "TABLE",
+    "icon": "ShieldAlert",
+    "description": "بازی‌های نقش‌مخفی، استدلال تحلیلی و شبیه‌سازی استارتاپی",
+    "createdAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "cat-chess",
+    "name": "شطرنج و بازی‌های فکری",
+    "slug": "chess",
+    "type": "TABLE",
+    "icon": "Crown",
+    "description": "رقابت‌های تاکتیکی، حافظه و پیش‌بینی حرکات",
+    "createdAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "cat-console",
+    "name": "فوتبال کنسولی (PS5)",
+    "slug": "console-football",
+    "type": "ELECTRONIC",
+    "icon": "Gamepad2",
+    "description": "مسابقات فوتبال حرفه‌ای تک به تک و دونفره روی پلی‌استیشن ۵",
+    "createdAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const scenarios = [
+  {
+    "id": "sc-investigator",
+    "categoryId": "cat-mafia",
+    "title": "سناریوی بازپرس (۱۰ تا ۱۳ نفره)",
+    "slug": "bazpors",
+    "minPlayers": 10,
+    "maxPlayers": 13,
+    "description": "سناریوی رسمی و استراتژیک بازپرس با نبرد سنگین میان ناتو و شیاد در برابر بازپرس، محقق، رویین‌تن و اسنایپر. مجهز به قوانین ورود به دفاعیه با رأی مافیا + ۱، استعلام وضعیت ۵۰٪ و سوداگری (یاکوزایی).",
+    "rules": "ورود به دفاعیه با رأی برابر تعداد مافیاهای زنده + ۱ انجام می‌شود. دو بار استعلام وضعیت در طول بازی با رأی اکثریت ۵۰٪ مجاز است. امکان سوداگری (یاکوزایی) برای مافیا در صورت خروج یار. ۳ اخطار انضباطی مساوی با خروج مستقیم.",
+    "victoryCitizen": "خروج تمامی اعضای مافیا از بازی از طریق استدلال‌های روز، تیر تک‌تیرانداز و احکام بازپرس.",
+    "victoryMafia": "برابر شدن تعداد اعضای مافیا با شهروندان یا حذف نقش‌های کلیدی شهر توسط شات‌های ناتویی و فریب شیاد.",
+    "dayPhaseRules": "نطق‌های روز، وقت چالش آزاد، رأی‌گیری دفاعیه با حداقل رأی (تعداد مافیا + ۱)، دفاع ۳۰ ثانیه‌ای، رأی‌گیری نهایی خروج و احکام دادگاهی بازپرس.",
+    "nightPhaseRules": "ترتیب بیدار شدن: تیم مافیا (شات) ➔ ناتو (حدس نقش) ➔ شیاد (منفی‌ساز استعلام) ➔ دکتر (نجات) ➔ کارآگاه (استعلام) ➔ محقق (پیوند سرنوشت) ➔ تک‌تیرانداز (شات).",
+    "createdAt": "2026-11-09T13:51:50.369Z"
+  },
+  {
+    "id": "sc-capo",
+    "categoryId": "cat-mafia",
+    "title": "سناریوی کاپو (۱۰ نفره)",
+    "slug": "capo",
+    "minPlayers": 10,
+    "maxPlayers": 10,
+    "description": "سناریوی رسمی کاپو با مکانیزم معتمد شهر و تفنگ دوگانه (مشقی/جنگی)، زهر عطار و رأی‌گیری شبانه پادزهر، جادوگر آینه‌ای و وارث نامیرای شهر.",
+    "rules": "در انتهای روز یک، رأی‌گیری انتخاب معتمد انجام می‌شود. معتمد ۲ تارگت می‌دهد و شب موقت مافیا با ۱ تیر مشقی و ۱ تیر جنگی تفنگ را مسلح می‌کند. زهر عطار نیازمند رأی‌گیری شبانه پادزهر با نصف + ۱ است. ۲ پادزهر در بازی موجود است (یکی دن مافیا، یکی عطار).",
+    "victoryCitizen": "کشف و اعدام تمامی اعضای مافیا از طریق تفنگ کاپو، استعلام‌های کارآگاه و زهر عطار.",
+    "victoryMafia": "به تساوی کشاندن بازی با فریب معتمد شهر، شات‌های جلاد، جادوهای معکوس‌کننده و خرید اعضا.",
+    "dayPhaseRules": "در انتهای روز یک رأی‌گیری انتخاب معتمد شهر برگزار می‌شود؛ معتمد ۱۵ ثانیه صحبت و ۲ نفر را تارگت می‌کند. شب موقت تشکیل شده و پس از دفاعیه ۳۰ ثانیه‌ای، معتمد شلیک می‌کند.",
+    "nightPhaseRules": "ترتیب شب: تیم مافیا (جادوگر با تیم بیدار شده ولی اکت تکی دارد) ➔ زره‌ساز ➔ کارآگاه ➔ عطار ➔ وارث.",
+    "createdAt": "2026-11-09T13:51:50.370Z"
+  },
+  {
+    "id": "sc-representative",
+    "categoryId": "cat-mafia",
+    "title": "سناریوی نماینده (۱۰ تا ۱۳ نفره)",
+    "slug": "namayandeh",
+    "minPlayers": 10,
+    "maxPlayers": 13,
+    "description": "سناریوی جذاب نماینده با مکانیزم انتخاب دو نماینده، خواب نیم‌روزی، رأی خیانت رئیس مافیا، تله مین‌گذار و فدایی مافیا.",
+    "rules": "انتهای روز یک، ۲ نماینده از سر و انتهای صحبت انتخاب می‌شوند. خواب نیم‌روزی برای رأی خیانت رئیس مافیا (لایک: +۱ رأی، دیسلایک: -۱ رأی) تشکیل می‌شود. حق آوردن کاور برای دفاعیه؛ ناتویی تیمی مافیا یک بار؛ خنثی‌سازی مین یک بار.",
+    "victoryCitizen": "کشف مافیا از طریق نمایندگان هوشیار، هدایت استعلام‌های راهنما و خنثی کردن دسیسه‌های هکر و یاغی.",
+    "victoryMafia": "نفوذ به جایگاه نمایندگی شهر، فداکاری مین و اعمال اثرگذار رأی‌های خیانت تا رسیدن به برابری عددی.",
+    "dayPhaseRules": "انتخاب ۲ نماینده؛ خواب نیم‌روزی مافیا؛ اعلام تارگت نمایندگان با ۲۰ ثانیه صحبت؛ دفاع متهمان به همراه افراد کاورکننده؛ رأی‌گیری با احتساب رأی خیانت (خروج با ۴ رأی).",
+    "nightPhaseRules": "ترتیب شب: مین‌گذار ➔ تیم مافیا ➔ وکیل ➔ محافظ ➔ پزشک ➔ راهنما (در ۱۲-۱۳ نفره تک‌تیرانداز بعد از محافظ).",
+    "createdAt": "2026-11-09T13:51:50.370Z"
+  },
+  {
+    "id": "sc-classic",
+    "categoryId": "cat-mafia",
+    "title": "مافیای کلاسیک پیشرفته",
+    "slug": "classic",
+    "minPlayers": 10,
+    "maxPlayers": 14,
+    "description": "سناریوی استاندارد مسابقاتی مافیا با حضور پدرخوانده، دکتر، کارآگاه، اسنایپر و نبرد ناب استدلال.",
+    "rules": "رأی‌گیری خروج در روز با اکثریت آرا؛ شات شبانه مافیا؛ سیو دکتر و استعلام کارآگاه.",
+    "victoryCitizen": "حذف تمامی اعضای مافیا از بازی.",
+    "victoryMafia": "برابر شدن تعداد مافیا با شهروندان.",
+    "dayPhaseRules": "صحبت نوبتی، چلنج، ورود به دفاعیه و رأی‌گیری خروج.",
+    "nightPhaseRules": "تیم مافیا ➔ دکتر ➔ کارآگاه ➔ تک‌تیرانداز.",
+    "createdAt": "2026-11-09T13:51:50.370Z"
+  },
+  {
+    "id": "sc-business",
+    "categoryId": "cat-mafia",
+    "title": "اکوسیستم کسب‌وکار رکاد",
+    "slug": "business-ecosystem",
+    "minPlayers": 10,
+    "maxPlayers": 16,
+    "description": "سناریوی اختصاصی بازی‌های مدیریتی و هوش مصنوعی رُکاد با نقش‌های هوش مصنوعی، دلال و فرشته سرمایه‌گذار.",
+    "rules": "پیچینگ استارتاپی، جذب سرمایه و فاز شبانه ضدجاسوسی صنعتی.",
+    "victoryCitizen": "رشد پایدار استارتاپ‌ها و حذف دلالان مخرب.",
+    "victoryMafia": "ورشکستگی اکوسیستم توسط دلالان.",
+    "dayPhaseRules": "جلسات دفاع استارتاپی و رأی‌گیری سهامداران.",
+    "nightPhaseRules": "حملات سایبری، نجات‌های سرمایه‌گذاری و تحلیل‌های هوش مصنوعی.",
+    "createdAt": "2026-11-09T13:51:50.370Z"
+  }
+];
+  const roles = [
+  {
+    "id": "rl-baz-1",
+    "scenarioId": "sc-investigator",
+    "name": "رئیس مافیا (پدرخوانده)",
+    "side": "MAFIA",
+    "description": "فرمانده ارشد مافیا با استعلام منفی در برابر کارآگاه و حق انحصاری سوداگری (یاکوزایی).",
+    "abilities": "تعیین تیر نهایی شب تیم مافیا. استعلامش همیشه برای کارآگاه منفی است. قابلیت سوداگری (یاکوزایی): در صورت خروج یکی از اعضای مافیا، می‌تواند شبانه یک شهروند ساده یا رویین‌تن را به مافیا تبدیل کند.",
+    "nightOrder": 1,
+    "tips": "در روز به عنوان شهروند سفید و منطقی بازی کنید تا با خیال راحت استعلام منفی دریافت کنید و در زمان لازم معامله یاکوزایی را بزنید.",
+    "icon": "Skull"
+  },
+  {
+    "id": "rl-baz-2",
+    "scenarioId": "sc-investigator",
+    "name": "ناتو",
+    "side": "MAFIA",
+    "description": "تک‌تیرانداز اطلاعاتی مافیا با قابلیت شکار مستقیم نقش‌ها بدون اثر نجات دکتر.",
+    "abilities": "در فاز شب به جای شات عادی مافیا، می‌تواند نقش یکی از شهروندان را دقیق حدس بزند. در صورت درستی حدس، آن شهروند بدون توجه به سیو دکتر حذف خواهد شد.",
+    "nightOrder": 2,
+    "tips": "به لحن و فکت‌های روز شهروندان دقت کنید؛ دکترها و کارآگاه‌ها معمولاً در روز لیدری محتاطانه انجام می‌دهند.",
+    "icon": "Crosshair"
+  },
+  {
+    "id": "rl-baz-3",
+    "scenarioId": "sc-investigator",
+    "name": "شیاد",
+    "side": "MAFIA",
+    "description": "شعبده‌باز مافیا که استعلام کارآگاه را معکوس و وارونه می‌سازد.",
+    "abilities": "هر شب یک نفر را انتخاب می‌کند. اگر آن شخص کارآگاه باشد، استعلام آن شب کارآگاه معکوس شده و استعلام مافیا منفی یا استعلام شهروند معکوس اعلام می‌شود.",
+    "nightOrder": 3,
+    "tips": "حدس بزنید کدام بازیکن در فاز روز برای شب استعلام جمع می‌کند تا او را شیادی کنید و شهر را به گمراهی بکشانید.",
+    "icon": "Sparkles"
+  },
+  {
+    "id": "rl-baz-4",
+    "scenarioId": "sc-investigator",
+    "name": "مافیای ساده",
+    "side": "MAFIA",
+    "description": "عضو تیم مافیا (مخصوص بازی ۱۳ نفره) برای پشتیبانی و فضاسازی در فاز روز.",
+    "abilities": "حضور در شات شبانه مافیا، مشورت تیمی و ایجاد جریان‌های انحرافی در رأی‌گیری‌های روز.",
+    "nightOrder": 1,
+    "tips": "سپر بلای رئیس مافیا و ناتو شوید تا آن‌ها بتوانند ابیلیتی‌های کلیدی خود را اجرا کنند.",
+    "icon": "Skull"
+  },
+  {
+    "id": "rl-baz-5",
+    "scenarioId": "sc-investigator",
+    "name": "دکتر (پزشک)",
+    "side": "CITIZEN",
+    "description": "ناجی شهروندان از شلیک‌های خونین شبانه مافیا.",
+    "abilities": "هر شب یک بازیکن را از تیر مافیا نجات می‌دهد. در بازی ۱۰ نفره ۱ بار و در بازی ۱۳ نفره ۲ بار می‌تواند خودش را سیو کند.",
+    "nightOrder": 4,
+    "tips": "نقش‌های افشاشده مانند بازپرس و کارآگاه را کاور کنید و سیو خود را در شب‌های اول هدر ندهید.",
+    "icon": "HeartPulse"
+  },
+  {
+    "id": "rl-baz-6",
+    "scenarioId": "sc-investigator",
+    "name": "کارآگاه",
+    "side": "CITIZEN",
+    "description": "کاوشگر شبانه که هویت بازیکنان را از گرداننده استعلام می‌کند.",
+    "abilities": "هر شب استعلام یک مظنون را می‌گیرد. استعلام رئیس مافیا منفی است و شیاد می‌تواند استعلام او را معکوس کند.",
+    "nightOrder": 5,
+    "tips": "استعلام‌های مثبت را بدون عجله و با دلایل منطقی در روز باز کنید تا ناتو شما را شات نکند.",
+    "icon": "Search"
+  },
+  {
+    "id": "rl-baz-7",
+    "scenarioId": "sc-investigator",
+    "name": "محقق",
+    "side": "CITIZEN",
+    "description": "پژوهشگر حقیقت که بین سرنوشت خود و بازیکنان پیوند اطلاعاتی ایجاد می‌کند.",
+    "abilities": "هر شب یک نفر را انتخاب کرده و پیوند می‌زند؛ اگر آن شخص مافیا (غیر از رئیس) باشد، با خروج محقق رسوا و سایدش افشا می‌شود.",
+    "nightOrder": 6,
+    "tips": "افراد خاکستری و کم‌ریسک را انتخاب کنید تا مافیاهای پنهان در سایه را شکار کنید.",
+    "icon": "Search"
+  },
+  {
+    "id": "rl-baz-8",
+    "scenarioId": "sc-investigator",
+    "name": "تک‌تیرانداز (اسنایپر)",
+    "side": "CITIZEN",
+    "description": "سلاح مرگبار شهروندان در فاز شب.",
+    "abilities": "دارای تیر جنگی شبانه؛ در صورت شلیک به مافیا او را می‌کشد، اما اگر به شهروند شلیک کند خودش صبح روز بعد کشته می‌شود.",
+    "nightOrder": 7,
+    "tips": "تنها در صورت اطمینان ۹۰ درصدی شلیک کنید تا جان خود و یک شهروند را از دست ندهید.",
+    "icon": "Crosshair"
+  },
+  {
+    "id": "rl-baz-9",
+    "scenarioId": "sc-investigator",
+    "name": "بازپرس",
+    "side": "CITIZEN",
+    "description": "قاضی ارشد شهروندان با قدرت کشاندن فوری مظنونین به دفاعیه و اجرای عدالت.",
+    "abilities": "یک بار در بازی می‌تواند ۲ بازیکن را مستقیماً به دفاعیه ببرد یا در روز رأی‌گیری ویژه برگزار کند. استعلام روند پرونده را از گرداننده می‌گیرد.",
+    "nightOrder": 8,
+    "tips": "قدرت خود را در لحظات حساس دو قطبی خرج کنید تا مافیا غافلگیر شده و مجبور به دفاع ناگهانی شود.",
+    "icon": "Shield"
+  },
+  {
+    "id": "rl-baz-10",
+    "scenarioId": "sc-investigator",
+    "name": "رویین‌تن",
+    "side": "CITIZEN",
+    "description": "سپر دفاعی شهروندان مجهز به جلیقه ضدگلوله شبانه.",
+    "abilities": "در فاز شب دارای یک زره است و با اولین تیر مافیا کشته نمی‌شود (صبح اعلام می‌شود زره افتاد). قابلیت سوداگری/یاکوزایی شدن را دارد.",
+    "nightOrder": 0,
+    "tips": "به عنوان شهروند شجاع خط مقدم بازی کنید و تارگت‌های جسورانه بزنید زیرا تیر اول مافیا شما را نمی‌کشد.",
+    "icon": "Shield"
+  },
+  {
+    "id": "rl-baz-11",
+    "scenarioId": "sc-investigator",
+    "name": "شهروند ساده",
+    "side": "CITIZEN",
+    "description": "پایه و ستون تصمیم‌گیری‌های روز با قابلیت یاکوزایی شدن.",
+    "abilities": "حق رأی در روز، درخواست چالش و استعلام وضعیت. قابلیت تبدیل به مافیا در صورت معامله رئیس مافیا.",
+    "nightOrder": 0,
+    "tips": "با دقت در میمیک و فکت‌های بازیکنان، آرای خود را متحد کرده و به شهر در خروج مافیا کمک کنید.",
+    "icon": "UserCheck"
+  },
+  {
+    "id": "rl-capo-1",
+    "scenarioId": "sc-capo",
+    "name": "دن مافیا",
+    "side": "MAFIA",
+    "description": "پدرخوانده کاپو با استعلام منفی، پادزهر اختصاصی و قابلیت یاکوزایی.",
+    "abilities": "استعلامش منفی است. یک پادزهر دارد که در صورت زهر عطار استفاده می‌کند (اگر روز یک با تفنگ خارج شود به جادوگر می‌رسد). قابلیت یاکوزایی کردن اعضا را دارد.",
+    "nightOrder": 1,
+    "tips": "در مسلح کردن تفنگ معتمد در شب موقت، اولویت تیر جنگی و مشقی را مهندسی کنید.",
+    "icon": "Skull"
+  },
+  {
+    "id": "rl-capo-2",
+    "scenarioId": "sc-capo",
+    "name": "جادوگر",
+    "side": "MAFIA",
+    "description": "جادوگر مافیا که ابیلیتی شهروندان را علیه خودشان کمانه می‌کند.",
+    "abilities": "هر شب یک شهروند را انتخاب می‌کند: اگر زره‌ساز باشد خود او زره می‌گیرد، اگر کارآگاه باشد استعلامش منفی می‌شود، اگر عطار باشد برای خودش زهر می‌ریزد. یک شب در میان شخص تکراری مجاز است.",
+    "nightOrder": 1,
+    "tips": "کارآگاه و عطار را هدف بگیرید تا استعلام‌ها خنثی شده و عطار به خودش سم بدهد.",
+    "icon": "Sparkles"
+  },
+  {
+    "id": "rl-capo-3",
+    "scenarioId": "sc-capo",
+    "name": "جلاد",
+    "side": "MAFIA",
+    "description": "قصاب مافیا (مشابه ناتو در بازپرس) با توانایی حدس نقش شهروندان.",
+    "abilities": "در فاز شب نقش یک شهروند را حدس می‌زند و در صورت صحت، او بدون توجه به سیو از بازی خارج می‌شود.",
+    "nightOrder": 1,
+    "tips": "سر صحبت‌ها و ادعاهای پوششی زره‌ساز و وارث را دنبال کنید تا ضربه مهلک را بزنید.",
+    "icon": "Crosshair"
+  },
+  {
+    "id": "rl-capo-4",
+    "scenarioId": "sc-capo",
+    "name": "زره‌ساز",
+    "side": "CITIZEN",
+    "description": "پزشک و زره‌ساز شهروندان (مشابه نقش دکتر با تک سیو).",
+    "abilities": "تک‌سیو در هر شب. در کل بازی یک بار می‌تواند خودش را از شات نجات دهد.",
+    "nightOrder": 2,
+    "tips": "معتمد شهر و کارآگاه را در شب‌های پس از تفنگ کاپو حتماً زره بپوشانید.",
+    "icon": "HeartPulse"
+  },
+  {
+    "id": "rl-capo-5",
+    "scenarioId": "sc-capo",
+    "name": "کارآگاه",
+    "side": "CITIZEN",
+    "description": "استعلام‌گیرنده شبانه هویت بازیکنان.",
+    "abilities": "هر شب استعلام می‌گیرد؛ دن مافیا همیشه منفی است، مظنون همیشه مثبت است.",
+    "nightOrder": 3,
+    "tips": "مراقب افسون جادوگر باشید زیرا استعلام مثبت را منفی می‌کند.",
+    "icon": "Search"
+  },
+  {
+    "id": "rl-capo-6",
+    "scenarioId": "sc-capo",
+    "name": "عطار",
+    "side": "CITIZEN",
+    "description": "داروساز شهر مجهز به یک زهر کشنده و پادزهر نجات‌بخش.",
+    "abilities": "یک زهر دارد که به یک نفر می‌دهد. گرداننده صبح اعلام ورود زهر می‌کند و اول شب بعد رأی‌گیری پادزهر (نصف+۱) می‌شود؛ سپس عطار برای دادن یا ندادن پادزهر بیدار می‌شود.",
+    "nightOrder": 4,
+    "tips": "زهر را به مافیاهای مشکوک بدهید تا مافیا مجبور به سوزاندن پادزهر دن شود.",
+    "icon": "HeartPulse"
+  },
+  {
+    "id": "rl-capo-7",
+    "scenarioId": "sc-capo",
+    "name": "وارث",
+    "side": "CITIZEN",
+    "description": "جانشین نامیرای شهر که در شب معارفه پیوند ارث می‌بندد.",
+    "abilities": "اولین نقش در شب معارفه؛ یک نفر را انتخاب می‌کند و تا خروج او نامیرا است. فقط در صورت انتخاب کارآگاه، زره‌ساز و عطار صاحب نقش آنها می‌شود. غیرقابل یاکوزایی.",
+    "nightOrder": 5,
+    "tips": "در شب معارفه بازیکن قوی و صاحب‌سبک را انتخاب کنید تا پس از خروج او به عنوان مهره دوم وارد عمل شوید.",
+    "icon": "Shield"
+  },
+  {
+    "id": "rl-capo-8",
+    "scenarioId": "sc-capo",
+    "name": "مظنون",
+    "side": "CITIZEN",
+    "description": "شهروند ساده‌ای که استعلامش برای کارآگاه به اشتباه مثبت است.",
+    "abilities": "استعلام مثبت برای کارآگاه؛ سایدش در صورت خروج شهروند اعلام می‌شود. قابلیت یاکوزایی شدن دارد.",
+    "nightOrder": 0,
+    "tips": "با بازی صادقانه به کارآگاه بفهمانید که تارگت مثبت او به دلیل نقش مظنون است نه مافیا بودن.",
+    "icon": "UserCheck"
+  },
+  {
+    "id": "rl-capo-9",
+    "scenarioId": "sc-capo",
+    "name": "شهروند ساده",
+    "side": "CITIZEN",
+    "description": "شهروندان عادی شهر با قابلیت یاکوزایی شدن (۲ نفر در بازی).",
+    "abilities": "مشارکت در رأی‌گیری معتمد شهر، استدلال‌های روز و آرای شبانه پادزهر عطار.",
+    "nightOrder": 0,
+    "tips": "در انتخاب معتمد روز یک دقت کنید تا سلاح کاپو به دست تیم مافیا نیفتد.",
+    "icon": "UserCheck"
+  },
+  {
+    "id": "rl-rep-1",
+    "scenarioId": "sc-representative",
+    "name": "رئیس مافیا",
+    "side": "MAFIA",
+    "description": "فرمانده مافیا با استعلام منفی و حق رأی خیانت در خواب نیم‌روزی.",
+    "abilities": "تعیین شات شب؛ استعلام منفی؛ اعمال رأی خیانت لایک (+۱ رأی) یا دیسلایک (-۱ رأی) روی تارگت نمایندگان شهر در خواب نیم‌روزی.",
+    "nightOrder": 2,
+    "tips": "رأی خیانت را قبل از مشخص شدن نهایی تارگت‌ها هوشمندانه برای ضربه زدن به شهروندان تنظیم کنید.",
+    "icon": "Skull"
+  },
+  {
+    "id": "rl-rep-2",
+    "scenarioId": "sc-representative",
+    "name": "هکر",
+    "side": "MAFIA",
+    "description": "متخصص اخلال در توانایی شهروندان.",
+    "abilities": "هر شب توانایی یک نفر را روی شخص دیگری محدود می‌کند (نفر اول فاعل توانایی و نفر دوم مفعول محدودیت خواهد بود).",
+    "nightOrder": 2,
+    "tips": "پزشک و راهنما را هک کنید تا نتوانند به افراد مورد نظر خود سرویس دهند.",
+    "icon": "Sparkles"
+  },
+  {
+    "id": "rl-rep-3",
+    "scenarioId": "sc-representative",
+    "name": "یاغی",
+    "side": "MAFIA",
+    "description": "عضو انتقام‌جوی مافیا با شلیک انتحاری روزانه.",
+    "abilities": "با خروج رئیس یا هکر، در روزهای بعد تا قبل رأی‌گیری می‌تواند با یک نفر خارج شود مگر اینکه محافظ یا فرد حفاظت‌شده را بزند که تنها خارج می‌شود. مستقیم وارد شب می‌شوند.",
+    "nightOrder": 0,
+    "tips": "بازیکنان کلیدی را بدون دست زدن به محافظ هدف بگیرید تا یک شهروند مهم را همراه خود حذف کنید.",
+    "icon": "Flame"
+  },
+  {
+    "id": "rl-rep-4",
+    "scenarioId": "sc-representative",
+    "name": "مین‌گذار",
+    "side": "CITIZEN",
+    "description": "تله‌گذار شهر که جلوی خانه یک شهروند بمب‌گذاری می‌کند.",
+    "abilities": "یک بار در کل بازی جلوی در یک نفر مین می‌گذارد؛ با شات مافیا مین فعال شده و در صورت عدم خنثی‌سازی، یک مافیا (فدایی) به همراه شات خارج می‌شود.",
+    "nightOrder": 1,
+    "tips": "روی فردی مین بگذارید که مطمئن هستید مافیا امشب به او شلیک خواهد کرد.",
+    "icon": "Flame"
+  },
+  {
+    "id": "rl-rep-5",
+    "scenarioId": "sc-representative",
+    "name": "وکیل",
+    "side": "CITIZEN",
+    "description": "مدافع حقوقی شهروندان در برابر دفاعیه‌های ساختگی مافیا.",
+    "abilities": "یک بار در بازی شبانه وکالت یک نفر را بر عهده می‌گیرد؛ آن فرد فردا حتی با داشتن رأی لازم وارد دفاعیه نمی‌شود.",
+    "nightOrder": 3,
+    "tips": "وکالت را برای نجات شهروندی به کار ببرید که مافیا با رأی خیانت قصد اعدام او را دارد.",
+    "icon": "Shield"
+  },
+  {
+    "id": "rl-rep-6",
+    "scenarioId": "sc-representative",
+    "name": "محافظ",
+    "side": "CITIZEN",
+    "description": "سپر آهنین شهروندان در برابر ترور انتحاری یاغی.",
+    "abilities": "شب‌ها از یک نفر در مقابل یاغی محافظت می‌کند (او فردا زره دارد). خودش نیز همواره در مقابل یاغی ایمن است.",
+    "nightOrder": 4,
+    "tips": "نمایندگان برگزیده شهر را پوشش دهید تا یاغی نتواند آن‌ها را از بازی بیرون ببرد.",
+    "icon": "Shield"
+  },
+  {
+    "id": "rl-rep-7",
+    "scenarioId": "sc-representative",
+    "name": "پزشک",
+    "side": "CITIZEN",
+    "description": "طبیب شهروندان با قدرت نجات شبانه.",
+    "abilities": "هر شب یک نفر را نجات می‌دهد. در طول کل بازی ۲ بار می‌تواند خودش را نجات دهد.",
+    "nightOrder": 5,
+    "tips": "راهنما و مین‌گذار را نجات دهید تا شبکه اطلاعاتی و تله‌های شهر فعال بماند.",
+    "icon": "HeartPulse"
+  },
+  {
+    "id": "rl-rep-8",
+    "scenarioId": "sc-representative",
+    "name": "راهنما",
+    "side": "CITIZEN",
+    "description": "هدایت‌گر حقیقت که استعلام شهروندان را فعال می‌سازد.",
+    "abilities": "یک نفر را انتخاب می‌کند: اگر شهروند باشد بیدار شده و استعلام می‌گیرد؛ اگر مافیا باشد آن مافیا بیدار شده و راهنما را می‌شناسد. ۲ شب متوالی یک نفر نه.",
+    "nightOrder": 6,
+    "tips": "فقط به بازیکنانی دست بزنید که درصد شهروندی آن‌ها بالاست تا مافیا هویت شما را نشناسد.",
+    "icon": "Search"
+  },
+  {
+    "id": "rl-rep-9",
+    "scenarioId": "sc-representative",
+    "name": "شهروند ساده",
+    "side": "CITIZEN",
+    "description": "شهروند وفادار با کاندیداتوری نمایندگی شهر (۲ نفر در بازی).",
+    "abilities": "کاندید شدن برای نمایندگی، آوردن کاور در دفاعیه و رأی‌گیری.",
+    "nightOrder": 0,
+    "tips": "در صورت انتخاب شدن به عنوان نماینده، تارگت‌های منطقی بگذارید و اجازه نفوذ مافیا را ندهید.",
+    "icon": "UserCheck"
+  },
+  {
+    "id": "rl-cls-1",
+    "scenarioId": "sc-classic",
+    "name": "دن مافیا (پدرخوانده)",
+    "side": "MAFIA",
+    "description": "فرمانده عملیات شب مافیا با مصونیت کامل در برابر استعلام کارآگاه.",
+    "abilities": "تعیین تیر شب، شلیک نهایی و استعلام منفی.",
+    "nightOrder": 1,
+    "tips": "در طول روز نقاب شهروندی فعال بر چهره داشته باشید.",
+    "icon": "Skull"
+  },
+  {
+    "id": "rl-cls-2",
+    "scenarioId": "sc-classic",
+    "name": "دکتر شهر",
+    "side": "CITIZEN",
+    "description": "پزشک فداکار شهر با توانایی نجات شبانه.",
+    "abilities": "نجات یک نفر در هر شب. یک بار می‌تواند خودش را نجات دهد.",
+    "nightOrder": 2,
+    "tips": "الگوی شلیک مافیا را حدس بزنید.",
+    "icon": "HeartPulse"
+  },
+  {
+    "id": "rl-cls-3",
+    "scenarioId": "sc-classic",
+    "name": "کارآگاه",
+    "side": "CITIZEN",
+    "description": "پلیس مخفی شهر با مأموریت استعلام هویت مظنونین.",
+    "abilities": "استعلام یک نفر در هر شب (پدرخوانده منفی، مافیا مثبت).",
+    "nightOrder": 3,
+    "tips": "نتایج مثبت را هوشمندانه در روز بدون لو رفتن نقش اعلام کنید.",
+    "icon": "Search"
+  },
+  {
+    "id": "rl-cls-4",
+    "scenarioId": "sc-classic",
+    "name": "شهروند ساده",
+    "side": "CITIZEN",
+    "description": "عضو وفادار جامعه شهری بدون توانایی شبانه.",
+    "abilities": "حضور در صحبت‌ها و رأی‌گیری روز.",
+    "nightOrder": 0,
+    "tips": "با فکت‌سازی دقیق و انسجام آرا، مافیا را شکست دهید.",
+    "icon": "UserCheck"
+  }
+];
+  const electronicGames = [
+  {
+    "id": "eg-1",
+    "categoryId": "cat-console",
+    "title": "فوتبال کنسولی (PlayStation 5)",
+    "platform": "PlayStation 5",
+    "mode": "1v1 و 2v2",
+    "description": "جام هفتگی فوتبال کنسولی با مانیتورهای گیمینگ 144Hz و دسته‌های DualSense.",
+    "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+    "createdAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "eg-2",
+    "categoryId": "cat-console",
+    "title": "مورتال کامبت و مسابقات مبارزه‌ای",
+    "platform": "PlayStation 5",
+    "mode": "1v1 حذفی",
+    "description": "تورنمنت‌های هیجان‌انگیز سبک مبارزه‌ای با جایزه‌های نقدی و مدال کلاچ.",
+    "coverImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+    "createdAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const events = [
+  {
+    "id": "evt-1",
+    "title": "رویداد شب‌های مافیا (سناریوی کاپو)",
+    "description": "میز تخصصی ۱۰ نفره با حضور میزبان رسمی و کارت‌های فیزیکی نئوبروتالیسم گیم‌کاد.",
+    "coverImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80",
+    "categoryId": "cat-mafia",
+    "hostId": "usr-host-1",
+    "targetGender": "boys",
+    "payType": "full",
+    "price": 85000,
+    "depositAmount": 0,
+    "venueAddress": "مشهد، بلوار شهید فرامرز عباسی، رسالت ۳۲، بین ۴۵ و ۴۷، پلاک ۲۳ (باشگاه رکاد)",
+    "startTime": "2026-11-11T12:21:27.571Z",
+    "endTime": "2026-11-11T15:21:27.571Z",
+    "capacity": 12,
+    "reservedCount": 7,
+    "status": "open",
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "evt-2",
+    "title": "میز ویژه مافیا: اکوسیستم کسب‌وکار (دخترانه)",
+    "description": "رقابت نفس‌گیر استارتاپ‌ها، سرمایه‌گذاران و هوش مصنوعی در سالن شماره ۲ رکاد.",
+    "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80",
+    "categoryId": "cat-mafia",
+    "hostId": "usr-host-1",
+    "targetGender": "girls",
+    "payType": "deposit",
+    "price": 90000,
+    "depositAmount": 30000,
+    "venueAddress": "مشهد، بلوار شهید فرامرز عباسی، رسالت ۳۲، بین ۴۵ و ۴۷، پلاک ۲۳ (سالن یاس)",
+    "startTime": "2026-11-12T12:21:27.571Z",
+    "endTime": "2026-11-12T15:21:27.571Z",
+    "capacity": 14,
+    "reservedCount": 9,
+    "status": "open",
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "evt-3",
+    "title": "جام هفتگی فوتبال کنسولی (PlayStation 5)",
+    "description": "مسابقات حذفی فوتبال روی PS5 با حضور ۱۶ بازیکن و جوایز شارژ کیف پول.",
+    "coverImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    "categoryId": "cat-console",
+    "hostId": "usr-admin-1",
+    "targetGender": "mixed",
+    "payType": "venue",
+    "price": 60000,
+    "depositAmount": 0,
+    "venueAddress": "مشهد، رسالت ۳۲، بین ۴۵ و ۴۷، پلاک ۲۳ (اتاق گیمینگ)",
+    "startTime": "2026-11-13T12:21:27.571Z",
+    "endTime": "2026-11-13T16:21:27.571Z",
+    "capacity": 16,
+    "reservedCount": 12,
+    "status": "open",
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const reservations = [
+  {
+    "id": "res-1794231545798",
+    "eventId": "evt-1",
+    "userId": "usr-admin-1",
+    "seats": 4,
+    "totalPrice": 340000,
+    "paidOnline": 340000,
+    "venueDue": 0,
+    "paymentStatus": "refunded",
+    "holdUntil": null,
+    "attended": false,
+    "createdAt": "2026-11-09T13:39:05.798Z",
+    "updatedAt": "2026-11-09T13:39:21.030Z"
+  },
+  {
+    "id": "res-1",
+    "eventId": "evt-1",
+    "userId": "usr-player-1",
+    "seats": 1,
+    "totalPrice": 85000,
+    "paidOnline": 85000,
+    "venueDue": 0,
+    "paymentStatus": "paid",
+    "holdUntil": null,
+    "attended": true,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "res-2",
+    "eventId": "evt-2",
+    "userId": "usr-player-2",
+    "seats": 1,
+    "totalPrice": 90000,
+    "paidOnline": 30000,
+    "venueDue": 60000,
+    "paymentStatus": "partially_paid",
+    "holdUntil": null,
+    "attended": false,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const godGameSessions = [
+  {
+    "id": "ggs-1",
+    "title": "میز دمو خدای بازی - شب‌های مافیا کاپو",
+    "scenarioId": "sc-capo",
+    "hostId": "usr-host-1",
+    "targetGender": "boys",
+    "seatsCount": 10,
+    "currentPhase": "NIGHT",
+    "dayNumber": 2,
+    "timerSeconds": 180,
+    "timerRunning": false,
+    "winnerSide": null,
+    "isImported": false,
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T13:17:33.296Z"
+  }
+];
+  const walletTransactions = undefined;
+  const articles = [
+  {
+    "id": "art-1",
+    "title": "راهنمای جامع فن بیان و نطق دفاعیه در روز اول مافیا",
+    "slug": "defense-speech-guide",
+    "summary": "چگونه در ۶۰ ثانیه بدون ایجاد اتهام نامربوط، موضع شهروندی خود را برای دیگران شفاف کنید؟",
+    "content": "نطق روز اول شالوده ساختار بازی است. در این نوشتار سه اصل اساسی برای اعتمادسازی و ایجاد فکت‌های قابل استناد را مرور می‌کنیم: ۱. تمرکز روی لحن آرام و شمرده ۲. اجتناب از ادعاهای اغراق‌آمیز ۳. ثبت داده‌های آماری رأی‌گیری...",
+    "coverImage": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
+    "type": "guide",
+    "isPublished": true,
+    "authorName": "کمیته فنی آموزش رکاد",
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  },
+  {
+    "id": "art-2",
+    "title": "استراتژی‌های طلایی سناریوی اکوسیستم کسب‌وکار",
+    "slug": "business-ecosystem-strategies",
+    "summary": "بررسی نقش‌های هوش مصنوعی، فرشته سرمایه‌گذار و راه‌های مقابله با شایعات دلالان.",
+    "content": "در سناریوی اکوسیستم کسب‌وکار، داده حرف اول را می‌زند. بر خلاف بازی‌های سنتی که صرفاً بر حدس متکی هستند، در این مدل تحلیل جریان منابع مالی و مدل سرمایه‌گذاری می‌تواند دست دلالان را به سادگی رو کند...",
+    "coverImage": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+    "type": "guide",
+    "isPublished": true,
+    "authorName": "باشگاه کارآفرینی رکاد",
+    "createdAt": "2026-11-09T12:21:27.571Z",
+    "updatedAt": "2026-11-09T12:21:27.571Z"
+  }
+];
+  const mvps = undefined;
+  const settings = undefined;
+  const auditLogs = [
+  {
+    "id": "al-1",
+    "actorId": "usr-admin-1",
+    "action": "SYSTEM_BOOT",
+    "targetType": "SYSTEM",
+    "targetId": null,
+    "details": "راه‌اندازی اولیه سامانه گیم‌کاد و ایجاد پایگاه داده",
+    "createdAt": "2026-11-09T12:21:27.572Z"
+  }
+];
+
+  return {
+    users,
+    categories,
+    scenarios,
+    roles,
+    electronicGames,
+    events,
+    reservations,
+    godGameSessions,
+    walletTransactions,
+    articles,
+    mvps,
+    settings,
+    auditLogs,
+  };
+}

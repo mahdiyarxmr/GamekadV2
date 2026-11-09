@@ -1,0 +1,385 @@
+// Prisma schema for Gamekad / Rokad platform
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Gender {
+  boy
+  girl
+}
+
+enum TargetGender {
+  boys
+  girls
+  mixed
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum MembershipType {
+  ROKAD
+  EXTERNAL
+}
+
+enum PayType {
+  full
+  deposit
+  venue
+}
+
+enum EventStatus {
+  draft
+  open
+  full
+  ongoing
+  completed
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  partially_paid
+  venue_due
+  failed
+  refunded
+  partially_refunded
+}
+
+enum WalletTxType {
+  deposit
+  reserve_event
+  admin_adjust
+  refund
+}
+
+enum TxStatus {
+  pending
+  completed
+  failed
+}
+
+enum CategoryType {
+  TABLE
+  ELECTRONIC
+}
+
+enum RoleSide {
+  CITIZEN
+  MAFIA
+  INDEPENDENT
+}
+
+enum GodGamePhase {
+  SETUP
+  DAY
+  NIGHT
+  DEFENSE
+  VOTING
+  FINISHED
+}
+
+model User {
+  id              String         @id @default(uuid())
+  username        String         @unique
+  email           String         @unique
+  displayName     String
+  passwordHash    String
+  gender          Gender
+  avatar          String?        @default("preset-1")
+  phone           String?
+  bio             String?        @default("")
+  role            UserRole       @default(user)
+  membership      MembershipType @default(EXTERNAL)
+  godGameAllowed  Boolean        @default(false)
+  isSuspended     Boolean        @default(false)
+  walletBalance   Int            @default(0) // Iranian Tomans integer
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  reservations    Reservation[]
+  walletTxs       WalletTransaction[]
+  hostedEvents    Event[]        @relation("HostedEvents")
+  hostedGodGames  GodGameSession[] @relation("HostedGodGames")
+  playerStats     PlayerStat[]
+  userMedals      UserMedal[]
+  mvpAwards       MvpAward[]
+  auditLogs       AuditLog[]     @relation("ActorAuditLogs")
+  roleRecords     PlayerRoleRecord[]
+}
+
+model WalletTransaction {
+  id            String       @id @default(uuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          WalletTxType
+  amount        Int          // Tomans (positive for credit, negative for debit)
+  balanceAfter  Int
+  referenceCode String       @unique
+  description   String
+  status        TxStatus     @default(completed)
+  createdAt     DateTime     @default(now())
+}
+
+model Event {
+  id            String        @id @default(uuid())
+  title         String
+  description   String
+  coverImage    String?
+  categoryId    String
+  category      GameCategory  @relation(fields: [categoryId], references: [id])
+  hostId        String?
+  host          User?         @relation("HostedEvents", fields: [hostId], references: [id])
+  targetGender  TargetGender  @default(mixed)
+  payType       PayType       @default(full)
+  price         Int           @default(0) // Tomans
+  depositAmount Int           @default(0) // Tomans (for deposit model)
+  venueAddress  String        @default("مشهد، بلوار شهید فرامرز عباسی، رسالت ۳۲، بین ۴۵ و ۴۷، پلاک ۲۳")
+  startTime     DateTime
+  endTime       DateTime
+  capacity      Int           @default(12)
+  reservedCount Int           @default(0)
+  status        EventStatus   @default(open)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  reservations  Reservation[]
+}
+
+model Reservation {
+  id            String        @id @default(uuid())
+  eventId       String
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seats         Int           @default(1)
+  totalPrice    Int           @default(0)
+  paidOnline    Int           @default(0)
+  venueDue      Int           @default(0)
+  paymentStatus PaymentStatus @default(pending)
+  holdUntil     DateTime?
+  attended      Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model GameCategory {
+  id              String           @id @default(uuid())
+  name            String
+  slug            String           @unique
+  type            CategoryType     @default(TABLE)
+  icon            String?
+  description     String?
+  createdAt       DateTime         @default(now())
+
+  events          Event[]
+  scenarios       Scenario[]
+  electronicGames ElectronicGame[]
+  playerStats     PlayerStat[]
+}
+
+model Scenario {
+  id             String         @id @default(uuid())
+  categoryId     String
+  category       GameCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  title          String
+  slug           String         @unique
+  minPlayers     Int            @default(8)
+  maxPlayers     Int            @default(16)
+  description    String
+  rules          String
+  victoryCitizen String
+  victoryMafia   String
+  dayPhaseRules  String
+  nightPhaseRules String
+  createdAt      DateTime       @default(now())
+
+  roles          Role[]
+  godGames       GodGameSession[]
+}
+
+model Role {
+  id          String    @id @default(uuid())
+  scenarioId  String
+  scenario    Scenario  @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  name        String
+  side        RoleSide  @default(CITIZEN)
+  description String
+  abilities   String
+  nightOrder  Int?
+  tips        String?
+  icon        String?
+  createdAt   DateTime  @default(now())
+}
+
+model ElectronicGame {
+  id          String       @id @default(uuid())
+  categoryId  String
+  category    GameCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  title       String
+  platform    String       @default("PlayStation 5")
+  mode        String       @default("1v1")
+  description String?
+  coverImage  String?
+  createdAt   DateTime     @default(now())
+}
+
+model GodGameSession {
+  id            String        @id @default(uuid())
+  title         String
+  scenarioId    String
+  scenario      Scenario      @relation(fields: [scenarioId], references: [id])
+  hostId        String
+  host          User          @relation("HostedGodGames", fields: [hostId], references: [id])
+  targetGender  TargetGender  @default(boys)
+  seatsCount    Int           @default(10)
+  currentPhase  GodGamePhase  @default(SETUP)
+  dayNumber     Int           @default(1)
+  timerSeconds  Int           @default(180)
+  timerRunning  Boolean       @default(false)
+  winnerSide    RoleSide?
+  isImported    Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  seats         GodGameSeat[]
+  logs          GodGameLog[]
+}
+
+model GodGameSeat {
+  id             String         @id @default(uuid())
+  sessionId      String
+  session        GodGameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  seatNumber     Int
+  playerId       String?
+  playerName     String         @default("صندلی خالی")
+  roleId         String?
+  roleName       String?
+  roleSide       RoleSide?
+  isAlive        Boolean        @default(true)
+  warningsCount  Int            @default(0)
+  isNominated    Boolean        @default(false)
+  votesCount     Int            @default(0)
+  isKicked       Boolean        @default(false)
+}
+
+model GodGameLog {
+  id          String         @id @default(uuid())
+  sessionId   String
+  session     GodGameSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  phase       String
+  text        String
+  createdAt   DateTime       @default(now())
+}
+
+model PlayerStat {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    GameCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  score       Int          @default(0)
+  matches     Int          @default(0)
+  wins        Int          @default(0)
+  losses      Int          @default(0)
+  // Spider/radar chart 6 attributes (0-100)
+  reasoning   Int          @default(65) // استدلال
+  bluff       Int          @default(60) // بلوف
+  negotiation Int          @default(70) // مذاکره
+  leadership  Int          @default(55) // رهبری
+  shooting    Int          @default(50) // تیراندازی / شلیک
+  teamwork    Int          @default(75) // کار تیمی
+
+  @@unique([userId, categoryId])
+}
+
+model PlayerRoleRecord {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scenarioId  String
+  roleName    String
+  wins        Int      @default(0)
+  losses      Int      @default(0)
+
+  @@unique([userId, scenarioId, roleName])
+}
+
+model Medal {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  icon        String
+  description String
+  createdAt   DateTime    @default(now())
+
+  userMedals  UserMedal[]
+}
+
+model UserMedal {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  medalId    String
+  medal      Medal    @relation(fields: [medalId], references: [id], onDelete: Cascade)
+  awardedAt  DateTime @default(now())
+  note       String?
+}
+
+model MvpAward {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  period     String   // e.g. آبان ۱۴۰۵
+  note       String?
+  awardedAt  DateTime @default(now())
+}
+
+model Article {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  summary     String
+  content     String
+  coverImage  String?
+  type        String   @default("guide") // guide or news
+  isPublished Boolean  @default(true)
+  authorName  String   @default("تیم رکاد")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSetting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  description String?
+}
+
+model HomepageBlock {
+  id          String   @id @default(uuid())
+  blockKey    String   @unique
+  title       String
+  isVisible   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  actor      User?    @relation("ActorAuditLogs", fields: [actorId], references: [id])
+  action     String
+  targetType String
+  targetId   String?
+  details    String?
+  createdAt  DateTime @default(now())
+}

@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* IRANSansX Fonts from official Rokad Design Pack */
+@font-face {
+  font-family: 'IRANSansXFaNum';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/fonts/woff2/IRANSansX-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansXFaNum';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/fonts/woff2/IRANSansX-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansXFaNum';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/fonts/woff2/IRANSansX-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansXFaNum';
+  font-style: normal;
+  font-weight: 800;
+  src: url('/fonts/fonts/woff2/IRANSansX-ExtraBold.woff2') format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IRANSansXFaNum';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/fonts/fonts/woff2/IRANSansX-Black.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root {
+  /* Dark Gaming Theme (Rotello & Rokad Cyber Aesthetic) */
+  --theme-primary: #59BBAF;
+  --theme-primary-hover: #48D1B2;
+  --theme-primary-active: #38C2A3;
+  --theme-primary-surface: rgba(89, 187, 175, 0.12);
+  --theme-primary-dark: #2F756D;
+  --theme-shadow-color: #000000;
+
+  /* Sleek Dark Obsidian Surfaces */
+  --color-bg: #080B11;
+  --color-surface: #0E1420;
+  --color-surface-raised: #141C2C;
+  --color-surface-sunken: #0A0E17;
+  --color-border: #1E293B;
+  --color-border-subtle: #141C2A;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --border-color: #1E293B;
+}
+
+/* Force dark styling everywhere */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  direction: rtl;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'IRANSansXFaNum', 'Vazirmatn', system-ui, sans-serif;
+  overflow-x: hidden;
+  max-width: 100vw;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  text-align: right;
+  line-height: 1.65;
+}
+
+/* Fix Persian typography: NEVER break words mid-letter */
+* {
+  box-sizing: border-box;
+  word-break: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-height: 1.35;
+}
+
+p {
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-height: 1.75;
+}
+
+span, a, button, label {
+  word-break: normal;
+}
+
+/* Custom sleek scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #080B11;
+}
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #59BBAF;
+}
+
+/* Utility to hide scrollbars on horizontal pills */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Tactile Button & Card Physics */
+.btn-tactile {
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 120ms cubic-bezier(0.16, 1, 0.3, 1), border-color 120ms ease;
+}
+.btn-tactile:hover {
+  transform: translate(-1.5px, -1.5px);
+}
+.btn-tactile:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #000000 !important;
+}
+
+/* 3D Flip Card */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
