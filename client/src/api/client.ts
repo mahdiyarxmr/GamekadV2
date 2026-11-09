@@ -1,4 +1,4 @@
-const API_BASE = '/api/v1';
+const API_BASE = (import.meta.env.VITE_API_BASE as string) || (import.meta.env.VITE_API_URL as string) || '/api/v1';
 
 export async function apiFetch<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = localStorage.getItem('gamekad_token');

@@ -6,8 +6,23 @@ import { getInitialSeedData } from './initial-data';
 @Injectable()
 export class DatabaseService implements OnModuleInit {
   private readonly logger = new Logger(DatabaseService.name);
-  private dataDir = path.resolve(process.cwd(), 'data');
-  private dbFilePath = path.join(this.dataDir, 'gamekad-db.json');
+  private dbFilePath = this.resolveDbFilePath();
+
+  private resolveDbFilePath(): string {
+    const candidates = [
+      path.resolve(process.cwd(), 'data', 'gamekad-db.json'),
+      path.resolve(process.cwd(), 'server', 'data', 'gamekad-db.json'),
+      path.resolve(__dirname, '../../data/gamekad-db.json'),
+      path.resolve(__dirname, '../../../data/gamekad-db.json'),
+    ];
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
+    }
+    // Default to server/data or data
+    return path.resolve(process.cwd(), 'server', 'data', 'gamekad-db.json');
+  }
 
   public users: any[] = [];
   public categories: any[] = [];
@@ -35,15 +50,16 @@ export class DatabaseService implements OnModuleInit {
 
   private initDatabase() {
     try {
-      if (!fs.existsSync(this.dataDir)) {
-        fs.mkdirSync(this.dataDir, { recursive: true });
+      const dir = path.dirname(this.dbFilePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
       }
 
       if (fs.existsSync(this.dbFilePath)) {
         const raw = fs.readFileSync(this.dbFilePath, 'utf-8');
         const parsed = JSON.parse(raw);
         this.loadFromObject(parsed);
-        this.logger.log('گیم‌کاد: داده‌ها با موفقیت از مخزن دیتابیس بارگذاری شد.');
+        this.logger.log(`گیم‌کاد: داده‌ها با موفقیت از مخزن دیتابیس (${this.dbFilePath}) بارگذاری شد.`);
       } else {
         const initial = getInitialSeedData();
         this.loadFromObject(initial);
@@ -81,8 +97,9 @@ export class DatabaseService implements OnModuleInit {
 
   public save() {
     try {
-      if (!fs.existsSync(this.dataDir)) {
-        fs.mkdirSync(this.dataDir, { recursive: true });
+      const dir = path.dirname(this.dbFilePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
       }
       const data = {
         users: this.users,
@@ -107,7 +124,7 @@ export class DatabaseService implements OnModuleInit {
       };
       fs.writeFileSync(this.dbFilePath, JSON.stringify(data, null, 2), 'utf-8');
     } catch (err) {
-      this.logger.error('خطا در ذخیره‌سازی فایل دیتابیس:', err);
+      this.logger.warn('امکان نوشتن بر روی دیسک وجود ندارد (محیط سرورلس)، داده‌ها در حافظه موقت نگهداری می‌شوند.');
     }
   }
 

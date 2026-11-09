@@ -46,7 +46,8 @@ export class WalletService {
 
     const amountRials = amt * 10;
     const merchantId = '4ced0a1e-4ad8-4309-9668-3ea3ae8e8897';
-    const callbackUrl = 'http://localhost:5173/payment/callback';
+    const clientBaseUrl = process.env.CLIENT_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173');
+    const callbackUrl = `${clientBaseUrl.replace(/\/$/, '')}/payment/callback`;
 
     let authority = '';
     let isLiveSandbox = false;
@@ -103,7 +104,7 @@ export class WalletService {
       amount: amt,
       paymentUrl: isLiveSandbox
         ? `https://sandbox.zarinpal.com/pg/StartPay/${authority}`
-        : `http://localhost:5173/payment/callback?Authority=${authority}&Status=OK`,
+        : `${clientBaseUrl.replace(/\/$/, '')}/payment/callback?Authority=${authority}&Status=OK`,
       isLiveSandbox,
     };
   }
