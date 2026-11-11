@@ -30,21 +30,21 @@ export const LeaderboardPage: React.FC = () => {
   }, [activeCategory, genderFilter]);
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 py-4 sm:py-6 max-w-6xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col gap-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#59BBAF]/15 text-[#59BBAF] border border-[#59BBAF]/30 w-fit text-caption font-black">
+    <div className="flex flex-col gap-6 sm:gap-8 py-4 sm:py-6 max-w-6xl mx-auto w-full min-w-0">
+      {/* Centered Header */}
+      <div className="flex flex-col items-center text-center gap-2 max-w-2xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#59BBAF]/15 text-[#59BBAF] border border-[#59BBAF]/30 text-caption font-black">
           <Trophy size={14} className="text-amber-400" />
           <span>جدول رنکینگ رسمی گیم‌کاد</span>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-black text-white">رده‌بندی گرگ‌های شب و گیمرهای برتر</h1>
+        <h1 className="text-2xl sm:text-4xl font-black text-white">رده‌بندی گرگ‌های شب و گیمرهای برتر</h1>
         <p className="text-body-sm sm:text-body text-[#94A3B8]">
           جدول زنده امتیازات ثبت‌شده در نشست‌های بازی، نرخ برد، تعداد کلاچ‌های طلایی و مدال‌های افتخار.
         </p>
       </div>
 
       {/* Category Tabs & Gender Filter */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3.5 sm:p-4 bg-[#0E1420] rounded-2xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000]">
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-3.5 sm:p-4 bg-[#0E1420] rounded-2xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] w-full">
         {/* Categories Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
           {categories.map((cat) => (
@@ -64,7 +64,7 @@ export const LeaderboardPage: React.FC = () => {
         </div>
 
         {/* Gender Filter */}
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0 justify-center">
           <span className="text-caption font-bold text-[#64748B] ml-1">جنسیت:</span>
           {[
             { id: 'all', label: 'همه' },
@@ -86,6 +86,71 @@ export const LeaderboardPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* 3D GAMING PODIUM */}
+      {rankings.length >= 3 && (
+        <div className="bg-gradient-to-b from-[#0E1420] to-[#0A0E17] rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] p-5 sm:p-8 flex items-end justify-center gap-2 sm:gap-6 pt-10 select-none overflow-hidden w-full">
+          {/* Rank 2 (Silver Pedestal) */}
+          <div className="flex flex-col items-center gap-2 flex-1 max-w-[130px] sm:max-w-[150px]">
+            <Link to={`/players/${rankings[1].username}`} className="flex flex-col items-center gap-1 group">
+              <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-[#59BBAF] text-[#080B11] border-2 border-slate-300 shadow-[0_0_15px_rgba(148,163,184,0.3)] flex items-center justify-center font-black text-xl overflow-hidden group-hover:scale-105 transition-transform">
+                {rankings[1].avatar ? <img src={rankings[1].avatar} alt={rankings[1].displayName} className="w-full h-full object-cover" /> : rankings[1].displayName.slice(0, 1)}
+              </div>
+              <span className="text-caption sm:text-body-sm font-black text-white truncate max-w-[100px] sm:max-w-[130px] text-center mt-1">
+                {rankings[1].displayName}
+              </span>
+              <span className="text-[10px] font-black text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-600">
+                🥈 رتبه ۲
+              </span>
+            </Link>
+            <div className="w-full h-24 sm:h-28 rounded-t-2xl bg-gradient-to-t from-slate-900 to-slate-800 border-t-2 border-x-2 border-slate-400/60 flex flex-col items-center justify-center text-center p-2 shadow-inner">
+              <span className="text-title sm:text-h2 font-black text-slate-200">{toPersianDigits(rankings[1].score)}</span>
+              <span className="text-[10px] text-slate-400 font-bold">امتیاز</span>
+            </div>
+          </div>
+
+          {/* Rank 1 (Gold Pedestal) */}
+          <div className="flex flex-col items-center gap-2 flex-1 max-w-[140px] sm:max-w-[170px] relative z-10">
+            <div className="text-amber-400 animate-bounce">
+              <Crown size={28} />
+            </div>
+            <Link to={`/players/${rankings[0].username}`} className="flex flex-col items-center gap-1 group">
+              <div className="w-16 sm:w-20 h-16 sm:h-20 rounded-2xl bg-amber-400 text-black border-2 border-amber-300 shadow-[0_0_25px_rgba(245,158,11,0.5)] flex items-center justify-center font-black text-2xl overflow-hidden group-hover:scale-105 transition-transform">
+                {rankings[0].avatar ? <img src={rankings[0].avatar} alt={rankings[0].displayName} className="w-full h-full object-cover" /> : rankings[0].displayName.slice(0, 1)}
+              </div>
+              <span className="text-caption sm:text-body-sm font-black text-white truncate max-w-[110px] sm:max-w-[140px] text-center mt-1">
+                {rankings[0].displayName}
+              </span>
+              <span className="text-[10px] font-black text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-500/50">
+                👑 گرگ برتر
+              </span>
+            </Link>
+            <div className="w-full h-32 sm:h-36 rounded-t-2xl bg-gradient-to-t from-amber-950/60 via-amber-900/40 to-amber-800/50 border-t-2 border-x-2 border-amber-400 flex flex-col items-center justify-center text-center p-2 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+              <span className="text-title sm:text-h1 font-black text-amber-300">{toPersianDigits(rankings[0].score)}</span>
+              <span className="text-[10px] text-amber-400/80 font-bold">امتیاز طلایی</span>
+            </div>
+          </div>
+
+          {/* Rank 3 (Bronze Pedestal) */}
+          <div className="flex flex-col items-center gap-2 flex-1 max-w-[130px] sm:max-w-[150px]">
+            <Link to={`/players/${rankings[2].username}`} className="flex flex-col items-center gap-1 group">
+              <div className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-[#59BBAF] text-[#080B11] border-2 border-amber-700 shadow-[0_0_15px_rgba(180,83,9,0.3)] flex items-center justify-center font-black text-xl overflow-hidden group-hover:scale-105 transition-transform">
+                {rankings[2].avatar ? <img src={rankings[2].avatar} alt={rankings[2].displayName} className="w-full h-full object-cover" /> : rankings[2].displayName.slice(0, 1)}
+              </div>
+              <span className="text-caption sm:text-body-sm font-black text-white truncate max-w-[100px] sm:max-w-[130px] text-center mt-1">
+                {rankings[2].displayName}
+              </span>
+              <span className="text-[10px] font-black text-amber-500 bg-amber-950/80 px-2 py-0.5 rounded-full border border-amber-700">
+                🥉 رتبه ۳
+              </span>
+            </Link>
+            <div className="w-full h-20 sm:h-22 rounded-t-2xl bg-gradient-to-t from-amber-950/80 to-amber-900/60 border-t-2 border-x-2 border-amber-700/60 flex flex-col items-center justify-center text-center p-2 shadow-inner">
+              <span className="text-title sm:text-h2 font-black text-amber-400">{toPersianDigits(rankings[2].score)}</span>
+              <span className="text-[10px] text-amber-500/80 font-bold">امتیاز</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Rankings Display (Table on Desktop, Cards on Mobile) */}
       <div className="bg-[#0E1420] rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] overflow-hidden">

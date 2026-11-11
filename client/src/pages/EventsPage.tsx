@@ -107,49 +107,49 @@ export const EventsPage: React.FC = () => {
           }}
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full">
           {filteredEvents.map((evt) => (
             <div
               key={evt.id}
-              className="bg-[#0E1420] rounded-2xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] hover:border-[#59BBAF] transition-all p-5 sm:p-6 flex flex-col justify-between gap-5 group"
+              className="bg-[#0E1420] rounded-2xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] hover:border-[#59BBAF] transition-all p-4 sm:p-6 flex flex-col justify-between gap-5 group w-full max-w-full overflow-hidden"
             >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-3 min-w-0 w-full">
+                <div className="flex items-center justify-between gap-2">
                   <GenderBadge targetGender={evt.targetGender} />
-                  <span className="text-caption font-black text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                  <span className="text-caption font-black text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
                     {toPersianDigits(evt.remainingSeats || 0)} صندلی خالی
                   </span>
                 </div>
 
-                <h3 className="text-title sm:text-h2 font-black text-white group-hover:text-[#59BBAF] transition-colors line-clamp-1">
+                <h3 className="text-title sm:text-h2 font-black text-white group-hover:text-[#59BBAF] transition-colors truncate">
                   {evt.title}
                 </h3>
-                <p className="text-body-sm text-[#94A3B8] line-clamp-2 leading-relaxed">
+                <p className="text-body-sm text-[#94A3B8] line-clamp-2 leading-relaxed break-words">
                   {evt.description}
                 </p>
 
-                <div className="flex flex-col gap-1.5 text-caption font-bold text-[#64748B] pt-2 border-t border-[#1E293B]">
-                  <div className="flex items-center gap-1.5 text-white">
-                    <Clock size={14} className="text-[#59BBAF]" />
+                <div className="flex flex-col gap-1.5 text-caption font-bold text-[#64748B] pt-2 border-t border-[#1E293B] min-w-0 w-full">
+                  <div className="flex items-center gap-1.5 text-white shrink-0">
+                    <Clock size={14} className="text-[#59BBAF] shrink-0" />
                     <span>{formatShamsiDate(evt.startTime)}</span>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <MapPin size={14} className="text-[#59BBAF]" />
-                    <span className="truncate">{evt.venueAddress}</span>
+                  <div className="flex items-center gap-1.5 min-w-0 max-w-full">
+                    <MapPin size={14} className="text-[#59BBAF] shrink-0" />
+                    <span className="truncate block" title={evt.venueAddress}>{evt.venueAddress}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-[#1E293B] flex items-center justify-between">
-                <div>
+              <div className="pt-3 border-t border-[#1E293B] flex items-center justify-between gap-2">
+                <div className="min-w-0">
                   <span className="text-[11px] text-[#64748B] block">
                     {evt.payType === 'deposit' ? 'پیش‌پرداخت رزرو:' : 'ورودی کامل:'}
                   </span>
-                  <span className="text-body sm:text-title font-black text-[#59BBAF]">
+                  <span className="text-body sm:text-title font-black text-[#59BBAF] whitespace-nowrap">
                     {formatTomans(evt.payType === 'deposit' ? (evt.depositAmount || Math.round(evt.price * 0.3)) : evt.price)}
                   </span>
                 </div>
-                <Link to={`/events/${evt.id}`}>
+                <Link to={`/events/${evt.id}`} className="shrink-0">
                   <Button variant="primary" size="sm">
                     <span>انتخاب صندلی</span>
                     <ArrowLeft size={14} />

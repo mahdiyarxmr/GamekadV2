@@ -24,27 +24,27 @@ export const GamesPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 py-4 sm:py-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex flex-col gap-1.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#59BBAF]/15 text-[#59BBAF] border border-[#59BBAF]/30 w-fit text-caption font-black">
-            <Flame size={14} className="text-amber-400" />
-            <span>کاتالوگ رقابت‌های کلاب</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-black text-white">بازی‌های رومیزی، سناریوها و رقابت‌های PS5</h1>
-          <p className="text-body-sm text-[#94A3B8]">
-            انتخاب بین سناریوهای مافیای کلاسیک، کاپو، بازپرس و دوئل‌های کنسولی EA FC 25 و مورتال کامبت.
-          </p>
+      {/* Centered Header */}
+      <div className="flex flex-col items-center text-center gap-3 max-w-2xl mx-auto w-full">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#59BBAF]/15 text-[#59BBAF] border border-[#59BBAF]/30 text-caption font-black">
+          <Flame size={14} className="text-amber-400" />
+          <span>کاتالوگ مسابقات و بازی‌های کلاب</span>
         </div>
+        <h1 className="text-2xl sm:text-4xl font-black text-white">بازی‌های رومیزی، سناریوها و رقابت‌های PS5</h1>
+        <p className="text-body-sm sm:text-body text-[#94A3B8]">
+          انتخاب بین سناریوهای مافیای کلاسیک، کاپو، بازپرس و دوئل‌های کنسولی EA FC 25 و مورتال کامبت.
+        </p>
 
-        <Tabs
-          items={[
-            { id: 'table', label: 'سناریوهای رومیزی و مافیا' },
-            { id: 'electronic', label: 'رقابت‌های کنسولی PS5' },
-          ]}
-          activeId={activeTab}
-          onChange={(id) => setActiveTab(id as any)}
-        />
+        <div className="mt-2 w-full flex justify-center">
+          <Tabs
+            items={[
+              { id: 'table', label: 'سناریوهای رومیزی و مافیا' },
+              { id: 'electronic', label: 'رقابت‌های کنسولی PS5' },
+            ]}
+            activeId={activeTab}
+            onChange={(id) => setActiveTab(id as any)}
+          />
+        </div>
       </div>
 
       {loading ? (

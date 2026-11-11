@@ -771,6 +771,131 @@ export function getInitialSeedData() {
   }
 ];
 
+  const medals = [
+    {
+      id: 'med-1',
+      title: 'ستاره میز',
+      slug: 'table-star',
+      icon: 'Sparkles',
+      tier: 'GOLD',
+      description: 'بهترین بازیکن فنی و تأثیرگذارترین تحلیل‌گر در یک نشست کامل مسابقه.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-2',
+      title: 'کلاچ (Clutch)',
+      slug: 'clutch',
+      icon: 'Zap',
+      tier: 'DIAMOND',
+      description: 'برگرداندن بازی غیرممکن در ثانیه‌های پایانی و نجات تیم از شکست قطعی.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-3',
+      title: 'میزبان شب',
+      slug: 'night-host',
+      icon: 'Flame',
+      tier: 'GOLD',
+      description: 'مدیریت و داوری بی‌نقص و عادلانه به عنوان خدای بازی در مسابقات رسمی.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-4',
+      title: 'بازی‌تمیز (Fair Play)',
+      slug: 'fair-play',
+      icon: 'HeartHandshake',
+      tier: 'SILVER',
+      description: 'رعایت ادب، انضباط، اخلاق جوانمردانه، کنترل احساسات و احترام به رأی داور.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-5',
+      title: 'گرگ شب',
+      slug: 'night-wolf',
+      icon: 'Moon',
+      tier: 'DIAMOND',
+      description: 'پیروزی کامل در ساید مافیا بدون از دست دادن حتی یک یار در شب و تسلط کامل بر دادگاه.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-6',
+      title: 'بازپرس تیزبین',
+      slug: 'sharp-investigator',
+      icon: 'Eye',
+      tier: 'GOLD',
+      description: 'تشخیص صددرصدی اعضای مافیا و ایجاد اجماع شهری در روز اول دادگاه.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    },
+    {
+      id: 'med-7',
+      title: 'سخنور برتر',
+      slug: 'top-orator',
+      icon: 'Mic',
+      tier: 'BRONZE',
+      description: 'اقناع جمعی با فن بیان مسلط، استدلال محکم منطقی و کاهش تشنج در دور دفاعیه.',
+      createdAt: '2026-11-09T12:21:27.571Z'
+    }
+  ];
+
+  const userMedals = [
+    {
+      id: 'um-1',
+      userId: 'usr-player-1',
+      medalId: 'med-1',
+      awardedAt: '2026-11-09T12:21:27.571Z',
+      note: 'اجرای بی‌نقص استراتژی در فینال کاپو آبان‌ماه'
+    },
+    {
+      id: 'um-2',
+      userId: 'usr-player-1',
+      medalId: 'med-2',
+      awardedAt: '2026-11-09T12:21:27.571Z',
+      note: 'نجات شهر در رأی‌گیری ثانیه پایانی با تک شات دقیق'
+    },
+    {
+      id: 'um-3',
+      userId: 'usr-player-1',
+      medalId: 'med-5',
+      awardedAt: '2026-11-09T14:10:00.000Z',
+      note: 'پیروزی در ساید مافیا بدون هیچ تلفات شبانه'
+    },
+    {
+      id: 'um-4',
+      userId: 'usr-player-1',
+      medalId: 'med-6',
+      awardedAt: '2026-11-09T15:20:00.000Z',
+      note: 'تشخیص هوشمندانه دو مافیا در دفاعیه اول'
+    },
+    {
+      id: 'um-5',
+      userId: 'usr-player-1',
+      medalId: 'med-7',
+      awardedAt: '2026-11-09T16:00:00.000Z',
+      note: 'نطق دفاعیه قدرتمند و آرامش‌بخش در لحظات حساس'
+    },
+    {
+      id: 'um-6',
+      userId: 'usr-player-2',
+      medalId: 'med-3',
+      awardedAt: '2026-11-09T12:21:27.571Z',
+      note: 'داوری مسلط و بدون حاشیه در تورنمنت دختران'
+    },
+    {
+      id: 'um-7',
+      userId: 'usr-player-2',
+      medalId: 'med-4',
+      awardedAt: '2026-11-09T12:21:27.571Z',
+      note: 'رعایت اخلاق جوانمردانه در مواجهه با اشتباه هم‌تیمی'
+    },
+    {
+      id: 'um-8',
+      userId: 'usr-player-2',
+      medalId: 'med-1',
+      awardedAt: '2026-11-09T14:30:00.000Z',
+      note: 'سیوهای طلایی متوالی در نقش دکتر'
+    }
+  ];
+
   return {
     users,
     categories,
@@ -783,6 +908,8 @@ export function getInitialSeedData() {
     walletTransactions,
     articles,
     mvps,
+    medals,
+    userMedals,
     settings,
     auditLogs,
   };

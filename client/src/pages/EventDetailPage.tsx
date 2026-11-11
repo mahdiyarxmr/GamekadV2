@@ -132,7 +132,7 @@ export const EventDetailPage: React.FC = () => {
       </div>
 
       {/* Main Card */}
-      <div className="bg-[#0E1420] rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] overflow-hidden p-5 sm:p-8 flex flex-col gap-6">
+      <div className="bg-[#0E1420] rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] overflow-hidden p-4 sm:p-8 flex flex-col gap-6 w-full max-w-full">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-[#1E293B]">
           <div className="flex items-center gap-2">
             <GenderBadge targetGender={event.targetGender} />
@@ -146,47 +146,47 @@ export const EventDetailPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <h1 className="text-2xl sm:text-4xl font-black text-white">{event.title}</h1>
-          <p className="text-body-sm sm:text-body text-[#94A3B8] leading-relaxed">{event.description}</p>
+        <div className="flex flex-col gap-3 min-w-0 w-full">
+          <h1 className="text-xl sm:text-3xl md:text-4xl font-black text-white leading-snug break-words">{event.title}</h1>
+          <p className="text-body-sm sm:text-body text-[#94A3B8] leading-relaxed break-words">{event.description}</p>
         </div>
 
         {/* Info Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[#0A0E17] rounded-2xl border border-[#1E293B]">
-          <div className="flex items-center gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-[#0A0E17] rounded-2xl border border-[#1E293B] w-full max-w-full">
+          <div className="flex items-center gap-3 min-w-0">
             <Clock size={20} className="text-[#59BBAF] shrink-0" />
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <span className="text-caption text-[#64748B] font-bold">زمان شروع مسابقه:</span>
-              <span className="text-body-sm font-bold text-white">{formatShamsiDate(event.startTime)}</span>
+              <span className="text-body-sm font-bold text-white whitespace-nowrap">{formatShamsiDate(event.startTime)}</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <MapPin size={20} className="text-[#59BBAF] shrink-0" />
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <span className="text-caption text-[#64748B] font-bold">سالن باشگاه:</span>
-              <span className="text-body-sm font-bold text-white">{event.venueAddress}</span>
+              <span className="text-body-sm font-bold text-white break-words">{event.venueAddress}</span>
             </div>
           </div>
         </div>
 
         {/* Host Info */}
         {event.host && (
-          <div className="flex items-center gap-3 p-4 bg-[#141C2C] rounded-xl border border-[#1E293B]">
-            <div className="w-10 h-10 rounded-xl bg-[#59BBAF] text-[#080B11] font-black flex items-center justify-center shadow-sm">
+          <div className="flex items-center gap-3 p-4 bg-[#141C2C] rounded-xl border border-[#1E293B] w-full max-w-full">
+            <div className="w-10 h-10 rounded-xl bg-[#59BBAF] text-[#080B11] font-black flex items-center justify-center shadow-sm shrink-0">
               {event.host.displayName.slice(0, 1)}
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               <span className="text-caption text-[#64748B] font-bold">گرداننده و خدای بازی:</span>
-              <span className="text-body-sm font-black text-white">{event.host.displayName}</span>
+              <span className="text-body-sm font-black text-white truncate">{event.host.displayName}</span>
             </div>
           </div>
         )}
 
         {/* Reservation Box */}
-        <div className="p-5 sm:p-6 bg-[#0A0E17] rounded-2xl border-1.5 border-[#59BBAF]/50 shadow-[0_0_20px_rgba(89,187,175,0.1)] flex flex-col gap-5">
+        <div className="p-4 sm:p-6 bg-[#0A0E17] rounded-2xl border-1.5 border-[#59BBAF]/50 shadow-[0_0_20px_rgba(89,187,175,0.1)] flex flex-col gap-5 w-full max-w-full">
           <h3 className="text-title font-black text-white flex items-center gap-2">
-            <Zap size={18} className="text-[#59BBAF]" />
+            <Zap size={18} className="text-[#59BBAF] shrink-0" />
             <span>رزرو صندلی و تسویه آنلاین</span>
           </h3>
 
@@ -212,23 +212,23 @@ export const EventDetailPage: React.FC = () => {
           </div>
 
           {/* Price Breakdown */}
-          <div className="flex flex-col gap-2 pt-3 border-t border-[#1E293B] text-body-sm">
+          <div className="flex flex-col gap-2 pt-3 border-t border-[#1E293B] text-body-sm w-full">
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span>ورودی هر صندلی:</span>
-              <span>{formatTomans(unitPrice)}</span>
+              <span className="whitespace-nowrap">{formatTomans(unitPrice)}</span>
             </div>
             <div className="flex items-center justify-between text-[#94A3B8]">
               <span>مبلغ کل ({toPersianDigits(seats)} صندلی):</span>
-              <span className="font-bold text-white">{formatTomans(totalPrice)}</span>
+              <span className="font-bold text-white whitespace-nowrap">{formatTomans(totalPrice)}</span>
             </div>
-            <div className="flex items-center justify-between font-bold text-[#59BBAF]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-bold text-[#59BBAF]">
               <span>مبلغ قابل پرداخت آنلاین {event.payType === 'deposit' ? '(پیش‌پرداخت رزرو)' : ''}:</span>
-              <span className="text-title font-black">{formatTomans(onlineRequired)}</span>
+              <span className="text-title font-black whitespace-nowrap">{formatTomans(onlineRequired)}</span>
             </div>
             {venueDue > 0 && (
-              <div className="flex items-center justify-between text-amber-400 font-bold">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-amber-400 font-bold">
                 <span>باقی‌مانده قابل تسویه هنگام ورود به کلاب:</span>
-                <span>{formatTomans(venueDue)}</span>
+                <span className="whitespace-nowrap">{formatTomans(venueDue)}</span>
               </div>
             )}
           </div>

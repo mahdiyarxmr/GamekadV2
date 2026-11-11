@@ -51,8 +51,8 @@ export const SpiderChart: React.FC<SpiderChartProps> = ({ skills, size = 320 }) 
   const dataPolygonString = dataPoints.map((p) => `${p.x},${p.y}`).join(' ');
 
   return (
-    <div className="w-full flex flex-col items-center justify-center py-2 select-none">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="overflow-visible">
+    <div className="w-full max-w-[340px] flex flex-col items-center justify-center py-2 select-none mx-auto overflow-hidden">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-auto aspect-square overflow-visible">
         {/* Background Grid Polygons */}
         {gridPolygons.map((pts, idx) => (
           <polygon
