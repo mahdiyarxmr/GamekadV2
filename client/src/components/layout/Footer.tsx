@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Gamepad2, MapPin, Phone, Clock, ShieldCheck, Flame } from 'lucide-react';
+import { MapPin, Phone, Clock, ShieldCheck } from 'lucide-react';
 import { toPersianDigits } from '../../utils/formatters';
 
 export const Footer: React.FC = () => {
@@ -17,28 +17,36 @@ export const Footer: React.FC = () => {
               <div>
                 <span className="text-h2 font-black text-white tracking-tight">کلاب گیمینگ گیم‌کاد</span>
                 <span className="block text-caption text-[#59BBAF] font-black">
-                  باشگاه بازی‌های حضوری، شب‌های مافیا و تورنمنت‌های کنسولی مشهد
+                  باشگاه بازی‌های حضوری، شب‌های مافیا و مسابقات کنسولی مشهد
                 </span>
               </div>
             </div>
             <p className="text-body-sm text-[#94A3B8] leading-relaxed max-w-md">
-              گیم‌کاد میدان رقابت زنده و آدرنالین گیمرهای مشهد است. میزهای تخصصی مافیا با کارت‌های فیزیکی نئوبروتالیسم، مسابقات حرفه‌ای پلی‌استیشن ۵ و رقابت برای صعود در رنکینگ لیدربورد.
+              گیم‌کاد میدان رقابت زنده، استدلال و آدرنالین گیمرهای مشهد است. رزرو آسان صندلی مسابقات مافیا، کارت‌های فیزیکی اختصاصی، تورنمنت‌های پلی‌استیشن ۵ و رقابت برای صعود در جدول رنکینگ مشهد.
             </p>
           </div>
 
-          {/* Contact Details */}
+          {/* Contact Details (Critique item 17: Clickable tel link) */}
           <div className="flex flex-col gap-3">
             <h4 className="text-body font-black text-white border-b border-[#1E293B] pb-2">
-              لوکیشن و شماره تماس
+              لوکیشن و تماس مستقیم
             </h4>
             <div className="flex items-start gap-2 text-body-sm text-[#94A3B8] leading-relaxed">
               <MapPin size={18} className="text-[#59BBAF] shrink-0 mt-0.5" />
               <span>مشهد، فرامرز عباسی، رسالت ۳۲، بین ۴۵ و ۴۷، پلاک ۲۳</span>
             </div>
-            <div className="flex items-center gap-2 text-body-sm text-[#94A3B8]">
-              <Phone size={18} className="text-[#59BBAF] shrink-0" />
-              <span className="font-mono text-white font-bold">{toPersianDigits('09332881180')}</span>
-            </div>
+            
+            <a
+              href="tel:09332881180"
+              className="inline-flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-[#0E1420] border-1.5 border-[#1E293B] hover:border-[#59BBAF] text-white hover:text-[#59BBAF] transition-all text-body-sm font-bold w-fit group shadow-hard-xs"
+            >
+              <Phone size={18} className="text-[#59BBAF] group-hover:scale-110 transition-transform" />
+              <span className="font-mono text-base">{toPersianDigits('09332881180')}</span>
+              <span className="text-caption font-bold text-[#59BBAF] mr-1 bg-[#59BBAF]/10 px-2 py-0.5 rounded">
+                تماس با باشگاه
+              </span>
+            </a>
+
             <div className="flex items-center gap-2 text-body-sm text-[#94A3B8]">
               <Clock size={18} className="text-[#59BBAF] shrink-0" />
               <span>هر روز عصرها از ساعت ۱۶:۰۰ تا پاسی از شب</span>
@@ -66,18 +74,18 @@ export const Footer: React.FC = () => {
               <Link to="/games" className="text-[#94A3B8] hover:text-[#59BBAF] transition-colors">
                 بازی‌های کنسولی
               </Link>
-              <Link to="/host/god-game" className="text-[#94A3B8] hover:text-[#59BBAF] transition-colors">
-                میز خدای بازی
+              <Link to="/learn" className="text-[#94A3B8] hover:text-[#59BBAF] transition-colors">
+                اتاق تاکتیک و آموزش
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar (Critique item 15: Natural user-centric copy) */}
         <div className="mt-8 pt-6 border-t border-[#1E293B] flex flex-col sm:flex-row items-center justify-between gap-4 text-caption text-[#64748B] font-bold">
           <div className="flex items-center gap-2">
             <ShieldCheck size={16} className="text-[#59BBAF]" />
-            <span>پلتفرم مسابقاتی گیم‌کاد — هویت سایبری و دارک نئوبروتالیسم رُکاد</span>
+            <span>پلتفرم تخصصی مسابقات و رویدادهای باشگاه گیم‌کاد رُکاد</span>
           </div>
           <div>
             © {toPersianDigits(1405)} گیم‌کاد کلاب مشهد

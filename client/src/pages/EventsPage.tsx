@@ -121,20 +121,30 @@ export const EventsPage: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="text-title sm:text-h2 font-black text-white group-hover:text-[#59BBAF] transition-colors truncate">
+                <h3 className="text-title font-black text-white group-hover:text-[#59BBAF] transition-colors line-clamp-2 min-h-[48px]">
                   {evt.title}
                 </h3>
                 <p className="text-body-sm text-[#94A3B8] line-clamp-2 leading-relaxed break-words">
                   {evt.description}
                 </p>
 
+                {/* Unified thin seat bar */}
+                <div className="w-full h-1.5 rounded-full bg-[#0A0E17] overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-[#59BBAF]"
+                    style={{
+                      width: `${Math.min(100, Math.max(10, (((evt.capacity || 12) - (evt.remainingSeats || 0)) / (evt.capacity || 12)) * 100))}%`,
+                    }}
+                  />
+                </div>
+
                 <div className="flex flex-col gap-1.5 text-caption font-bold text-[#64748B] pt-2 border-t border-[#1E293B] min-w-0 w-full">
                   <div className="flex items-center gap-1.5 text-white shrink-0">
-                    <Clock size={14} className="text-[#59BBAF] shrink-0" />
+                    <Clock size={15} className="text-[#59BBAF] shrink-0" />
                     <span>{formatShamsiDate(evt.startTime)}</span>
                   </div>
                   <div className="flex items-center gap-1.5 min-w-0 max-w-full">
-                    <MapPin size={14} className="text-[#59BBAF] shrink-0" />
+                    <MapPin size={15} className="text-[#59BBAF] shrink-0" />
                     <span className="truncate block" title={evt.venueAddress}>{evt.venueAddress}</span>
                   </div>
                 </div>
@@ -142,7 +152,7 @@ export const EventsPage: React.FC = () => {
 
               <div className="pt-3 border-t border-[#1E293B] flex items-center justify-between gap-2">
                 <div className="min-w-0">
-                  <span className="text-[11px] text-[#64748B] block">
+                  <span className="text-caption text-[#64748B] block font-bold">
                     {evt.payType === 'deposit' ? 'پیش‌پرداخت رزرو:' : 'ورودی کامل:'}
                   </span>
                   <span className="text-body sm:text-title font-black text-[#59BBAF] whitespace-nowrap">
@@ -150,9 +160,9 @@ export const EventsPage: React.FC = () => {
                   </span>
                 </div>
                 <Link to={`/events/${evt.id}`} className="shrink-0">
-                  <Button variant="primary" size="sm">
+                  <Button variant="primary" size="sm" className="h-10 px-4 font-black shadow-hard-xs">
                     <span>انتخاب صندلی</span>
-                    <ArrowLeft size={14} />
+                    <ArrowLeft size={16} />
                   </Button>
                 </Link>
               </div>
