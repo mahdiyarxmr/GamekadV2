@@ -9,7 +9,7 @@ interface AuthContextType {
   login: (identifier: string, password: string, rememberMe?: boolean) => Promise<void>;
   register: (data: any) => Promise<void>;
   logout: () => void;
-  quickLogin: (role: 'admin' | 'player' | 'host') => Promise<void>;
+  quickLogin: (identifierOrRole: string, customPassword?: string) => Promise<void>;
   refreshMe: () => Promise<void>;
 }
 
@@ -68,14 +68,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const quickLogin = async (role: 'admin' | 'player' | 'host') => {
-    const creds = {
-      admin: { identifier: 'admin', password: 'admin123' },
-      player: { identifier: 'player', password: 'player-pass-9' },
-      host: { identifier: 'host', password: 'host-pass-9' },
-    }[role];
+  const quickLogin = async (identifierOrRole: string, customPassword?: string) => {
+    let identifier = identifierOrRole;
+    let password = customPassword || '123456';
 
-    await login(creds.identifier, creds.password, true);
+    if (identifierOrRole === 'admin') {
+      identifier = 'admin';
+      password = customPassword || 'admin123';
+    } else if (identifierOrRole === 'player') {
+      identifier = 'player';
+      password = customPassword || '123456';
+    } else if (identifierOrRole === 'host') {
+      identifier = 'host';
+      password = customPassword || '123456';
+    }
+
+    await login(identifier, password, true);
   };
 
   const logout = () => {

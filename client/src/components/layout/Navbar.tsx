@@ -17,6 +17,8 @@ import {
   ChevronDown,
   Flame,
   Gamepad2,
+  Sparkles,
+  Target,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -134,7 +136,29 @@ export const Navbar: React.FC = () => {
                   className="w-full px-3 py-2 text-right text-caption font-bold text-white hover:bg-[#141C2C] flex items-center gap-2"
                 >
                   <Flame size={14} className="text-[#59BBAF]" />
-                  <span>بازیکن (player)</span>
+                  <span>مهدیار شریفی (player)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    quickLogin('sara_art');
+                    setShowDemoMenu(false);
+                  }}
+                  className="w-full px-3 py-2 text-right text-caption font-bold text-white hover:bg-[#141C2C] flex items-center gap-2"
+                >
+                  <Sparkles size={14} className="text-purple-400" />
+                  <span>سارا رضایی (sara_art)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    quickLogin('ali_k');
+                    setShowDemoMenu(false);
+                  }}
+                  className="w-full px-3 py-2 text-right text-caption font-bold text-white hover:bg-[#141C2C] flex items-center gap-2"
+                >
+                  <Target size={14} className="text-emerald-400" />
+                  <span>علی کاظمی (ali_k)</span>
                 </button>
               </div>
             )}
