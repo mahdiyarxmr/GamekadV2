@@ -36,8 +36,10 @@ export async function bootstrap(): Promise<Express> {
       const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
       app.enableCors({
-        origin: '*',
+        origin: true,
         credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        allowedHeaders: 'Content-Type,Accept,Authorization',
       });
 
       app.useGlobalPipes(
