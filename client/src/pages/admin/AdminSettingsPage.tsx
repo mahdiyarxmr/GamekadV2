@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../api/client';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
-import { Settings, Save } from 'lucide-react';
+import { Settings, Save, CheckCircle2 } from 'lucide-react';
 
 export const AdminSettingsPage: React.FC = () => {
   const [settings, setSettings] = useState<Record<string, string>>({
@@ -14,6 +14,7 @@ export const AdminSettingsPage: React.FC = () => {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [savedMessage, setSavedMessage] = useState(false);
 
   useEffect(() => {
     api.getAdminSettings().then((res) => {
@@ -25,28 +26,41 @@ export const AdminSettingsPage: React.FC = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setSavedMessage(false);
     try {
       await api.updateAdminSettings(settings);
-      alert('تنظیمات سایت گیم‌کاد با موفقیت ذخیره شد.');
+      setSavedMessage(true);
+      setTimeout(() => setSavedMessage(false), 4000);
     } finally {
       setSaving(false);
     }
   };
 
   if (loading) {
-    return <div className="p-8 text-center text-ui-text-muted font-bold">در حال بارگذاری تنظیمات...</div>;
+    return (
+      <div className="p-8 text-center text-[#94A3B8] font-bold">
+        در حال بارگذاری تنظیمات کلاب...
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-2xl">
+    <div className="flex flex-col gap-5 sm:gap-6 max-w-2xl w-full">
       <div>
-        <h1 className="text-h1 font-black text-ui-text-primary">تنظیمات عمومی گیم‌کاد و رکاد</h1>
-        <p className="text-body-sm text-ui-text-secondary">
+        <h1 className="text-xl sm:text-2xl font-black text-white">تنظیمات عمومی گیم‌کاد و رکاد</h1>
+        <p className="text-body-sm text-[#94A3B8]">
           مدیریت آدرس، تلفن تماس باشگاه، ساعات کاری و شعار اصلی سامانه.
         </p>
       </div>
 
-      <div className="bg-ui-surface rounded-3xl border-1.5 border-ui-border-default shadow-hard-md p-6 sm:p-8">
+      <div className="bg-[#0E1420] rounded-2xl sm:rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] p-4 sm:p-7 flex flex-col gap-4">
+        {savedMessage && (
+          <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/50 text-caption font-bold text-emerald-300 flex items-center gap-2">
+            <CheckCircle2 size={16} />
+            <span>تنظیمات باشگاه با موفقیت ذخیره شد.</span>
+          </div>
+        )}
+
         <form onSubmit={handleSave} className="flex flex-col gap-4">
           <Input
             label="شعار و تگ‌لاین سایت"
@@ -62,7 +76,7 @@ export const AdminSettingsPage: React.FC = () => {
             required
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <Input
               label="تلفن پشتیبانی"
               value={settings.phone}
@@ -70,7 +84,7 @@ export const AdminSettingsPage: React.FC = () => {
               required
             />
             <Input
-              label="ساعات کاری"
+              label="ساعات کاری باشگاه"
               value={settings.hours}
               onChange={(e) => setSettings({ ...settings, hours: e.target.value })}
               required
@@ -78,7 +92,13 @@ export const AdminSettingsPage: React.FC = () => {
           </div>
 
           <div className="pt-2">
-            <Button variant="persona" size="lg" type="submit" isLoading={saving}>
+            <Button
+              variant="primary"
+              size="lg"
+              type="submit"
+              isLoading={saving}
+              className="w-full sm:w-auto justify-center"
+            >
               <Save size={18} />
               <span>ذخیره تنظیمات سایت</span>
             </Button>
