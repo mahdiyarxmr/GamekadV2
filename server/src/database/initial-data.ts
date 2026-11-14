@@ -401,12 +401,13 @@ export function getInitialSeedData() {
       "price": 95000,
       "capacity": 11,
       "reservedCount": 9,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-14T17:00:00.000Z",
       "endTime": "2026-11-14T19:30:00.000Z",
       "address": "مشهد، بلوار سجاد، بزرگمهر شمالی ۱، پلاک ۴۲، سالن مسابقات کلاب گیم‌کاد",
-      "coverImage": "/profiles/Game Club.jpg"
+      "coverImage": "/profiles/Game Club.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-2",
@@ -418,12 +419,13 @@ export function getInitialSeedData() {
       "price": 75000,
       "capacity": 12,
       "reservedCount": 7,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-15T14:30:00.000Z",
       "endTime": "2026-11-15T16:30:00.000Z",
       "address": "مشهد، بلوار وکیل‌آباد، مجتمع فرهنگی رکاد، طبقه ۲، اتاق کنفرانس شماره ۳",
-      "coverImage": "/profiles/Studio.jpg"
+      "coverImage": "/profiles/Studio.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-3",
@@ -435,12 +437,13 @@ export function getInitialSeedData() {
       "price": 85000,
       "capacity": 10,
       "reservedCount": 8,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-16T16:00:00.000Z",
       "endTime": "2026-11-16T18:00:00.000Z",
       "address": "مشهد، بلوار سجاد، بزرگمهر شمالی ۱، سالن VIP گیم‌کاد",
-      "coverImage": "/profiles/Academy.jpg"
+      "coverImage": "/profiles/Academy.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-4",
@@ -452,12 +455,13 @@ export function getInitialSeedData() {
       "price": 60000,
       "capacity": 8,
       "reservedCount": 5,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-17T13:30:00.000Z",
       "endTime": "2026-11-17T16:00:00.000Z",
       "address": "مشهد، بلوار وکیل‌آباد، نبش وکیل‌آباد ۳۵، کافه بردگیم گیم‌کاد",
-      "coverImage": "/profiles/School.jpg"
+      "coverImage": "/profiles/School.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-5",
@@ -469,12 +473,13 @@ export function getInitialSeedData() {
       "price": 80000,
       "capacity": 10,
       "reservedCount": 6,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-18T12:30:00.000Z",
       "endTime": "2026-11-18T14:30:00.000Z",
       "address": "مشهد، بلوار سجاد، بزرگمهر شمالی ۱، پلاک ۴۲، سالن مسابقات گیم‌کاد",
-      "coverImage": "/profiles/Institute.jpg"
+      "coverImage": "/profiles/Institute.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-6",
@@ -486,12 +491,13 @@ export function getInitialSeedData() {
       "price": 110000,
       "capacity": 16,
       "reservedCount": 12,
-      "gender": "all",
+      "gender": "mixed",
       "status": "open",
       "startTime": "2026-11-19T15:30:00.000Z",
       "endTime": "2026-11-19T19:00:00.000Z",
       "address": "مشهد، بلوار سجاد، کلاب اختصاصی PS5 گیم‌کاد",
-      "coverImage": "/profiles/Girl.jpg"
+      "coverImage": "/profiles/Girl.jpg",
+      "targetGender": "mixed"
     },
     {
       "id": "ev-table-7",
@@ -508,7 +514,8 @@ export function getInitialSeedData() {
       "startTime": "2026-11-20T16:30:00.000Z",
       "endTime": "2026-11-20T19:00:00.000Z",
       "address": "مشهد، بلوار وکیل‌آباد، مجتمع فرهنگی رکاد، سالن آفتاب",
-      "coverImage": "/profiles/Boy.png"
+      "coverImage": "/profiles/Boy.png",
+      "targetGender": "girls"
     }
   ],
   "reservations": [

@@ -115,7 +115,7 @@ export const EventsPage: React.FC = () => {
             >
               <div className="flex flex-col gap-3 min-w-0 w-full">
                 <div className="flex items-center justify-between gap-2">
-                  <GenderBadge targetGender={evt.targetGender} />
+                  <GenderBadge targetGender={evt.targetGender || (evt as any).gender} />
                   <span className="text-caption font-black text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
                     {toPersianDigits(evt.remainingSeats || 0)} صندلی خالی
                   </span>

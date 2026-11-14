@@ -236,7 +236,7 @@ export const HomePage: React.FC = () => {
             <div className="flex flex-col gap-3 max-w-2xl text-right w-full min-w-0 flex-1">
               {/* Critique item 10: Max 2 clean chips */}
               <div className="flex flex-wrap items-center gap-2">
-                <GenderBadge targetGender={spotlight.targetGender} />
+                <GenderBadge targetGender={spotlight.targetGender || (spotlight as any).gender} />
                 <span className="text-caption font-black px-2.5 py-1 rounded-full bg-emerald-950/70 text-emerald-400 border border-emerald-500/40 shrink-0">
                   {toPersianDigits(spotlight.remainingSeats || 0)} صندلی خالی
                 </span>
@@ -327,7 +327,7 @@ export const HomePage: React.FC = () => {
               <div className="flex flex-col gap-2.5 min-w-0">
                 {/* Max 2 chips */}
                 <div className="flex items-center justify-between gap-2">
-                  <GenderBadge targetGender={evt.targetGender} />
+                  <GenderBadge targetGender={evt.targetGender || (evt as any).gender} />
                   <span className="text-caption font-black text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-500/30 shrink-0">
                     {toPersianDigits(evt.remainingSeats || 0)} صندلی خالی
                   </span>

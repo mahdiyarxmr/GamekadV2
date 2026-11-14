@@ -135,7 +135,7 @@ export const EventDetailPage: React.FC = () => {
       <div className="bg-[#0E1420] rounded-3xl border-1.5 border-[#1E293B] shadow-[2px_2px_0_#000000] overflow-hidden p-4 sm:p-8 flex flex-col gap-6 w-full max-w-full">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-[#1E293B]">
           <div className="flex items-center gap-2">
-            <GenderBadge targetGender={event.targetGender} />
+            <GenderBadge targetGender={event.targetGender || (event as any).gender} />
             <span className="text-caption font-bold px-2.5 py-0.5 rounded-full bg-[#141C2C] border border-[#1E293B] text-[#59BBAF]">
               {event.category?.name || 'شب‌های مافیا'}
             </span>
